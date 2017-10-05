@@ -1,0 +1,25 @@
+
+
+
+
+
+
+
+
+.ball {
+    border-radius: 100%
+}
+
+
+
+.home {
+    background-color: antiquewhite;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+
+body {
+    background-color: lightyellow;
+}
