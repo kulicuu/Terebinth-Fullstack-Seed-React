@@ -1,10 +1,10 @@
 
 
-arq = {}
+api = {}
 
 
-arq['primus_hotwire'] = ({ desire, state }) ->
-    { type, payload } = desire.payload
+api['primus_hotwire'] = ({ effect, state }) ->
+    { type, payload } = effect.payload
     primus.write { type, payload }
 
 
@@ -15,10 +15,10 @@ arq['primus_hotwire'] = ({ desire, state }) ->
 #         payload: desire.payload
 
 
-arq['init_primus'] = ({ desire, store }) ->
-    c 'initialising'
+api['init_primus'] = ({ effect, store }) ->
+    c 'initialising primus'
     primus.on 'data', (data) ->
-        c 'walla', data
+        c 'primus received data', data
         store.dispatch
             type: 'primus:data'
             payload: { data }
@@ -29,4 +29,4 @@ arq['init_primus'] = ({ desire, store }) ->
     # , 300
 
 
-exports.default = arq
+exports.default = api

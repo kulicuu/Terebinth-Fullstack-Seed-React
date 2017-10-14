@@ -2,36 +2,24 @@
 
 
 
-arq = {}
+api = {}
 
 
-concord_channel = {}
-
-
-concord_channel['res_build_selection'] = ({ state, action, data }) ->
-    c data
-    c data.payload, 'data.payload'
-    { job_id } = data.payload
-    state.setIn ['jobs', job_id, 'build_status'], 'completed_build'
-    # state
-
+incoming_effects_api = {}
 
 
 # concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
 #     state.setIn ['dctn_blob'], data.payload.blob
 
 
+keys_incoming_effects_api = keys incoming_effects_api
 
 
-
-keys_concord_channel = keys concord_channel
-
-
-arq['primus:data'] = ({ state, action }) ->
+api['primus:data'] = ({ state, action }) ->
     { data } = action.payload
     { type, payload } = action.payload.data
-    if includes(keys_concord_channel, type)
-        concord_channel[type] { state, action, data }
+    if includes(keys_incoming_effects_api, type)
+        incoming_effects_api[type] { state, action, data }
     else
         state
 
@@ -39,8 +27,8 @@ arq['primus:data'] = ({ state, action }) ->
 # these that require primus write sideeffects can be
 # handled by a single function from now on so additions
 # should require code edits in fewer places.
-arq['primus_hotwire'] = ({ state, action }) ->
-    state.setIn ['desires', shortid()],
+api['primus_hotwire'] = ({ state, action }) ->
+    state.setIn ['effects', shortid()],
         type: 'primus_hotwire'
         payload: action.payload
 
@@ -54,13 +42,13 @@ arq['primus_hotwire'] = ({ state, action }) ->
 
 
 
-keys_arq = keys arq
+keys_api = keys api
 
 
 lookup = (state, action) ->
-    state = state.setIn ['desires'], Imm.Map({})
-    if includes(keys_arq, action.type)
-        arq[action.type]({ state, action })
+    state = state.setIn ['effects'], Imm.Map({})
+    if includes(keys_api, action.type)
+        api[action.type]({ state, action })
     else
         c 'noop with ', action.type
         state
