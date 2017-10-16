@@ -2,10 +2,10 @@
 
 
 
-arq = {}
+api = {}
 
 
-arq['send_edited_message'] = ({ state, action }) ->
+api['send_edited_message'] = ({ state, action }) ->
     { token } = action.payload
     sesh = state.getIn ['lounger_sessions', token]
     { input_value, item } = action.payload.data.payload
@@ -25,37 +25,37 @@ arq['send_edited_message'] = ({ state, action }) ->
     state = state.set 'chat_log', chat_log
     state
 
-arq['change_username'] = ({ state, action }) ->
+api['change_username'] = ({ state, action }) ->
     { spark_id, token, data } = action.payload
     { username_input_field } = data.payload
     state = state.setIn ['lounger_sessions', token, 'username'], username_input_field
     state
 
 
-arq['send_message'] = ({ state, action }) ->
+api['send_message'] = ({ state, action }) ->
     { spark_id, token } = action.payload
     sesh = state.getIn(['lounger_sessions', token]).toJS()
     { session_metadata, safe_id, username } = sesh
     { input_field } = action.payload.data.payload
-    arq_900 =
+    api_900 =
         message_id: v4()
         input_field: input_field
         content: input_field
         timestamp: Date.now()
         safe_id: safe_id
     chat_log = state.get('chat_log')
-    state  = state.set('chat_log', chat_log.push(arq_900))
+    state  = state.set('chat_log', chat_log.push(api_900))
     state.setIn ['desires', shortid()],
         type: 'send_message'
-        payload: arq_900
+        payload: api_900
 
-arq['request_orient'] = ({ state, action }) ->
+api['request_orient'] = ({ state, action }) ->
     { spark_id, token } = action.payload
     state.setIn ['desires', shortid()],
         type: 'request_orient'
         payload: action.payload
 
-arq['do_login'] = ({ cs, state, action }) ->
+api['do_login'] = ({ state, action }) ->
     { spark_id, token } = action.payload
     # spark = state.getIn(['lounger_sessions', token, 'spark'])
     { username_candide, password_candide } = action.payload.data.payload
@@ -65,7 +65,7 @@ arq['do_login'] = ({ cs, state, action }) ->
     state
 
 
-arq['do_signup'] = ({ cs, state, action }) ->
+api['do_signup'] = ({ state, action }) ->
     { session_metadata, spark_id, data, token } = action.payload
     { type, payload } = data
     payload = assign payload, { session_metadata, spark_id, token }
@@ -78,7 +78,7 @@ arq['do_signup'] = ({ cs, state, action }) ->
         payload: 'payload'
     state
 
-arq['check_is_username_valid_and_avail'] = ({ state, action, data }) ->
+api['check_is_username_valid_and_avail'] = ({ state, action, data }) ->
     { session_metadata, spark_id, data, token } = action.payload
     { type, payload } = data
     todo = 'maintain some memory of ufos by ip and session'
@@ -89,4 +89,4 @@ arq['check_is_username_valid_and_avail'] = ({ state, action, data }) ->
     state
 
 
-exports.default = arq
+exports.default = api

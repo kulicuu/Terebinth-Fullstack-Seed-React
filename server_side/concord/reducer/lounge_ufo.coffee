@@ -28,7 +28,7 @@ animals = [
 
 
 
-arq = {}
+api = {}
 
 
 
@@ -40,12 +40,12 @@ ufo = require('./lounge_ufo_api').default
 keys_ufo = _.keys ufo
 
 
-arq['helsinki:spark:data'] = ({ cs, state, action }) ->
+api['helsinki:spark:data'] = ({ state, action }) ->
     { session_metadata, spark_id, data, token } = action.payload
     { type, payload } = data
 
     if includes(keys_ufo, type)
-        state = ufo[type] { cs, state, action, data, token }
+        state = ufo[type] { state, action, data, token }
     else if includes(keys_verified_lounger, type)
         user = state.getIn(['lounger_sessions', token, 'user'])
         if user.toJS?
@@ -56,7 +56,7 @@ arq['helsinki:spark:data'] = ({ cs, state, action }) ->
     state
 
 
-arq['helsinki:primus:spark'] = ({ cs, state, action }) ->
+api['helsinki:primus:spark'] = ({ state, action }) ->
     { spark, session_metadata } = action.payload
     { signedCookies, cookies, session, token } = session_metadata
     token = signedCookies['connect.sid']
@@ -72,4 +72,4 @@ arq['helsinki:primus:spark'] = ({ cs, state, action }) ->
         state = state.setIn(['lounger_sessions', token, 'spark'], spark)
     state
 
-module.exports = arq
+module.exports = api
