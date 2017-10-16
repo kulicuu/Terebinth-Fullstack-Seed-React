@@ -7206,10 +7206,6 @@ module.exports = exports['default'];
 
 __webpack_require__(36);
 
-c(React.version);
-
-// c = console.log.bind console
-// c 'hi'
 __webpack_require__(92);
 
 
@@ -47492,7 +47488,7 @@ window.onload = function() {
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var applyMiddleware, combineReducers, compose, createStore, imm_initial_state, initial_state, lookup, middleware, reducers, set, side_effect_trigger_f, side_effects, state_js, store, thunk;
+var applyMiddleware, combineReducers, compose, createStore, effect_trigger_f, effects, imm_initial_state, initial_state, lookup, middleware, reducers, set, state_js, store, thunk;
 
 ({applyMiddleware, compose, createStore} = __webpack_require__(27));
 
@@ -47512,23 +47508,23 @@ imm_initial_state = Imm.fromJS(initial_state);
 
 store = createStore(combineReducers(reducers), imm_initial_state, compose(applyMiddleware(middleware)));
 
-side_effects = __webpack_require__(102).default({store});
+effects = __webpack_require__(102).default({store});
 
-side_effect_trigger_f = function({store}) {
+effect_trigger_f = function({store}) {
   return function() {
     var state_js;
     state_js = store.getState().toJS();
-    return side_effects({state_js});
+    return effects({state_js});
   };
 };
 
-set = side_effect_trigger_f({store});
+set = effect_trigger_f({store});
 
 store.subscribe(set);
 
 state_js = imm_initial_state.toJS();
 
-side_effects({state_js});
+effects({state_js});
 
 module.exports = store;
 
@@ -47744,32 +47740,22 @@ exports['default'] = thunk;
 /* 100 */
 /***/ (function(module, exports) {
 
-var arq, concord_channel, keys_arq, keys_concord_channel, lookup;
+var api, incoming_effects_api, keys_api, keys_incoming_effects_api, lookup;
 
-arq = {};
+api = {};
 
-concord_channel = {};
-
-concord_channel['res_build_selection'] = function({state, action, data}) {
-  var job_id;
-  c(data);
-  c(data.payload, 'data.payload');
-  ({job_id} = data.payload);
-  return state.setIn(['jobs', job_id, 'build_status'], 'completed_build');
-};
-
-// state
+incoming_effects_api = {};
 
 // concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
 //     state.setIn ['dctn_blob'], data.payload.blob
-keys_concord_channel = keys(concord_channel);
+keys_incoming_effects_api = keys(incoming_effects_api);
 
-arq['primus:data'] = function({state, action}) {
+api['primus:data'] = function({state, action}) {
   var data, payload, type;
   ({data} = action.payload);
   ({type, payload} = action.payload.data);
-  if (includes(keys_concord_channel, type)) {
-    return concord_channel[type]({state, action, data});
+  if (includes(keys_incoming_effects_api, type)) {
+    return incoming_effects_api[type]({state, action, data});
   } else {
     return state;
   }
@@ -47778,8 +47764,8 @@ arq['primus:data'] = function({state, action}) {
 // these that require primus write sideeffects can be
 // handled by a single function from now on so additions
 // should require code edits in fewer places.
-arq['primus_hotwire'] = function({state, action}) {
-  return state.setIn(['desires', shortid()], {
+api['primus_hotwire'] = function({state, action}) {
+  return state.setIn(['effects', shortid()], {
     type: 'primus_hotwire',
     payload: action.payload
   });
@@ -47789,12 +47775,12 @@ arq['primus_hotwire'] = function({state, action}) {
 //     state.setIn ['desires', shortid()],
 //         type: 'search_struct_nodemem'
 //         payload: action.payload
-keys_arq = keys(arq);
+keys_api = keys(api);
 
 lookup = function(state, action) {
-  state = state.setIn(['desires'], Imm.Map({}));
-  if (includes(keys_arq, action.type)) {
-    return arq[action.type]({state, action});
+  state = state.setIn(['effects'], Imm.Map({}));
+  if (includes(keys_api, action.type)) {
+    return api[action.type]({state, action});
   } else {
     c('noop with ', action.type);
     return state;
@@ -47811,9 +47797,7 @@ exports.default = lookup;
 exports.default = {
   lookup: {
     // jobs: Imm.Map({})
-    search_results: [],
-    get_dctns_list_state: null,
-    desires: Imm.Map({
+    effects: Imm.Map({
       [`${shortid()}`]: {
         type: 'init_primus'
       }
@@ -47821,14 +47805,12 @@ exports.default = {
   }
 };
 
-// chat_log: Imm.List([])
-
 
 /***/ }),
 /* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arq, keys_arq, side_effects_f;
+var arq, effects_f, keys_arq;
 
 arq = {};
 
@@ -47837,16 +47819,16 @@ arq = assign(arq, __webpack_require__(103).default);
 
 keys_arq = keys(arq);
 
-side_effects_f = function({store}) {
+effects_f = function({store}) {
   return function({state_js}) {
-    var desire, key_id, ref, results, state;
+    var effect, key_id, ref, results, state;
     state = state_js;
-    ref = state.lookup.desires;
+    ref = state.lookup.effects;
     results = [];
     for (key_id in ref) {
-      desire = ref[key_id];
-      if (includes(keys_arq, desire.type)) {
-        results.push(arq[desire.type]({desire, store}));
+      effect = ref[key_id];
+      if (includes(keys_arq, effect.type)) {
+        results.push(arq[effect.type]({effect, store}));
       } else {
         results.push(void 0);
       }
@@ -47855,20 +47837,20 @@ side_effects_f = function({store}) {
   };
 };
 
-exports.default = side_effects_f;
+exports.default = effects_f;
 
 
 /***/ }),
 /* 103 */
 /***/ (function(module, exports) {
 
-var arq;
+var api;
 
-arq = {};
+api = {};
 
-arq['primus_hotwire'] = function({desire, state}) {
+api['primus_hotwire'] = function({effect, state}) {
   var payload, type;
-  ({type, payload} = desire.payload);
+  ({type, payload} = effect.payload);
   return primus.write({type, payload});
 };
 
@@ -47876,10 +47858,10 @@ arq['primus_hotwire'] = function({desire, state}) {
 //     primus.write
 //         type: 'build_selection'
 //         payload: desire.payload
-arq['init_primus'] = function({desire, store}) {
-  c('initialising');
+api['init_primus'] = function({effect, store}) {
+  c('initialising primus');
   return primus.on('data', function(data) {
-    c('walla', data);
+    c('primus received data', data);
     return store.dispatch({
       type: 'primus:data',
       payload: {data}
@@ -47891,7 +47873,7 @@ arq['init_primus'] = function({desire, store}) {
 //     primus.write
 //         type: 'request_orient'
 // , 300
-exports.default = arq;
+exports.default = api;
 
 
 /***/ }),

@@ -14,8 +14,6 @@
         "express": "latest",
         "express-session": "latest",
         "extract-text-webpack-plugin": "latest",
-        "gulp": "latest",
-        "gulp-util": "latest",
         "immutable": "latest",
         "keymirror": "latest",
         "lodash": "latest",
@@ -29,10 +27,10 @@
         "redux": "latest",
         "redux-immutable": "latest",
         "redux-thunk": "latest",
-        "rx": "latest",
         "shortid": "latest",
         "st": "latest",
         "webpack": "latest",
+        "wolfy87-eventemitter": "latest",
         "ws": "latest"
     }
 }
