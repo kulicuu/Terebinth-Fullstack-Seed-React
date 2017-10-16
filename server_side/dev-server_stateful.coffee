@@ -87,7 +87,7 @@ dev_server = ({ env, cs }) ->
 
 
 
-    require('./concord/index.coffee') { env, app_one_primus }
+    require('./store/index.coffee') { env, app_one_primus }
 
 
     app_one_server.listen app_one_arq.port, ->
