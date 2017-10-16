@@ -10,6 +10,10 @@ global.color = require 'bash-color'
 uuid = require 'node-uuid'
 global.v4 = uuid.v4.bind uuid
 global.path = require 'path'
+global.Imm = require 'immutable'
+global.shortid = require 'shortid'
+
+
 
 Redis = require 'redis'
 

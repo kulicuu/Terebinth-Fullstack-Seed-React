@@ -9,18 +9,14 @@ Dispatch = new Emitter()
 
 process.setMaxListeners 10000
 
-module.exports = ({ cs, env, redis, helsinki_primus }) ->
+module.exports = ({ env, app_one_primus }) ->
 
-    require './modules/globals.coffee'
 
-    state = require('./initial_state.coffee')
-        env: env
-        helsinki_primus: helsinki_primus
-        redis: redis
+    state = require('./initial_state.coffee') { env, app_one_primus }
 
     reducer = require('./reducer.coffee').default
 
-    effects = require('./effects.coffee').default { Dispatch, cs, env }
+    effects = require('./effects.coffee').default { Dispatch, env }
 
     Dispatch.on 'new_action', ({ action }) ->
         state = reducer { state, action }

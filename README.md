@@ -16,6 +16,6 @@
 From the `app_one` directory:  `webpack -w`
 
 From `server-side` directory:
-`dev-server.coffee`
+`dev-server_stateless.coffee`
 
 and open browser at `http://localhost:2223`

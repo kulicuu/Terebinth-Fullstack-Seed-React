@@ -2,9 +2,11 @@
 
 require './globals.coffee'
 
+c "#{color.green('Starting stateful dev-server.', on)}"
 
 
-dev_server = ({ env, cs, redis }) ->
+
+dev_server = ({ env, cs }) ->
 
     c = console.log.bind console
     _ = require 'lodash'
@@ -84,15 +86,19 @@ dev_server = ({ env, cs, redis }) ->
     # the_api = require('./app_one_layer_control/index').default
 
 
+
+    require('./concord/index.coffee') { env, app_one_primus }
+
+
     app_one_server.listen app_one_arq.port, ->
         c 'server on', app_one_arq.port
 
 
-    app_one_primus.on 'connection', (spark) ->
-        # dispatch to concord if want state
-        spark.on 'data', (data) ->
-
-            c data, 'data'
+    # app_one_primus.on 'connection', (spark) ->
+    #     # dispatch to concord if want state
+    #     spark.on 'data', (data) ->
+    #
+    #         c data, 'data'
 
             # the_api
             #     type: data.type

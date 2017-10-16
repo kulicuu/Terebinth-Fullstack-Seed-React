@@ -3,9 +3,9 @@
 
 api = {}
 
-api = assign api, require('./reducer/lounge_ufo.coffee')
+api = fp.assign api, require('./reducer/lounge_ufo.coffee')
 
-keys_api = keys api
+keys_api = _.keys api
 
 reducer = ({ cs, state, action }) ->
     state = state.setIn ['effects'], Imm.Map({})

@@ -5,16 +5,18 @@
 # There is also a logging to Redis functionality, which would in a fuller
 # implementation would implement a structured logging capability.
 
-c = console.log.bind console
-Redis = require 'redis'
-redis = Redis.createClient()
+# c = console.log.bind console
+# Redis = require 'redis'
+# redis = Redis.createClient()
 
 logging_func_f = ({ env, dev_server }) ->
+    c 'Making structured logging function.'
     cs = ( stuff ) ->
         redis.lpush 'log_cache', JSON.stringify(stuff)
-    dev_server { cs, env, redis }
+    dev_server { cs, env }
 
 get_state_cache = ({ logging_func_f, dev_server }) ->
+    c "Getting state cache."
     redis.hgetall 'env', (err, env) ->
         if err then c err else
             logging_func_f { env, dev_server }
