@@ -17,10 +17,12 @@ comp = rr
         email: null
         pwd: null
         candide: null
+        mood_status: 'ufo'
 
 
 
     render: ->
+        # c "state.disable", @state
         div
             style : styl_register_ctr()
             div
@@ -33,6 +35,7 @@ comp = rr
                     style: styl_email_ipt()
                     placeholder: 'Email'
                     type: 'text'
+                    disabled: @state.mood_status is 'justRegistered:waiting'
                     onChange: (e) =>
                         @props.check_avail { candide : e.currentTarget.value }
                         @setState
@@ -41,6 +44,7 @@ comp = rr
 
                 input
                     style: styl_pwd_ipt()
+                    disabled: @state.mood_status is 'justRegistered:waiting'
                     placeholder: 'password'
                     type: 'password'
                     onChange : (e) =>
@@ -50,9 +54,13 @@ comp = rr
 
                 button
                     style: styl_btn_registerGo()
-                    onClick: => @props.registerGo
-                        email: @state.email
-                        pwd: @state.pwd
+                    disabled: @state.mood_status is 'justRegistered:waiting'
+                    onClick: =>
+                        @props.registerGo
+                            email: @state.email
+                            pwd: @state.pwd
+                        @setState
+                            mood_status: 'justRegistered:waiting'
                     "Register!"
 
                 button
@@ -70,6 +78,7 @@ map_state_to_props = (state) ->
 map_dispatch_to_props = (dispatch) ->
 
     registerGo: ({ email, pwd }) ->
+        c 'dispactch with email & pwd', email, pwd
         dispatch
             type: 'registerGo'
             payload: { email, pwd }

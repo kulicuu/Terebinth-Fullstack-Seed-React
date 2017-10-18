@@ -2,6 +2,7 @@
     "dependencies": {
         "async": "latest",
         "bash-color": "latest",
+        "bcrypt": "latest",
         "bluebird": "latest",
         "coffeescript": "next",
         "coffee-script": "latest",

@@ -5,7 +5,9 @@ api = {}
 
 
 api.msg_server = ({ effect, state }) ->
+    c 'have'
     { type, payload } = effect.payload
+    c 'writing', type
     primus.write { type, payload }
 
 

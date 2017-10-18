@@ -1,12 +1,15 @@
 
 
 styl_btn_registerGo = ->
-    width: .3 * ww
-    height: .3 * wh
-    backgroundColor: 'magenta'
-    color: 'snow'
+    cursor: 'pointer'
+    width: .44 * ww
+    height: .24 * wh
+    backgroundColor: 'lightgrey'
+    color: 'darkslategrey'
     fontFamily: 'sans'
-    fontSize: .2 * wh
+    fontSize: .032 * wh
+    margin: .01 * wh
+
 
 
 styl_btn_return = ->
@@ -37,21 +40,22 @@ styl_login = ->
 
 styl_pwd_ipt = ->
     width: .18 * ww
-    height: .12 * wh
+    height: .032 * wh
     textAlign: 'center'
-    fontSize: .08 * wh
+    fontSize: .020 * wh
     color: 'gold'
-    backgroundColor: 'beige'
+    backgroundColor: 'darkslategrey'
+    margin: .01 * wh
 
 
 styl_email_ipt = ->
+    margin: .004 * wh
     color: 'gold'
-    backgroundColor: 'azure'
-    width: .72 * ww
-    height: .12 * wh
+    width: .58 * ww
+    height: .04 * wh
     textAlign: 'center'
-    fontSize: .08 * wh
-    backgroundColor: 'azure'
+    fontSize: .024 * wh
+    backgroundColor: 'darkslategrey'
 
 styl_options_ctr = ->
     display: 'flex'
@@ -91,11 +95,11 @@ styl_ufo = ->
 
 h3_top = ->
     fontFamily: 'sans'
-    fontSize: .04 * wh
-    marginBottom: .2 * wh
-    marginTop: .1 * wh
+    fontSize: .034 * wh
+    marginBottom: .002 * wh
+    marginTop: .002 * wh
     cursor: 'pointer'
-    color: 'chartreuse'
+    color: 'darkkhaki'
 
 
 

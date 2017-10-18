@@ -5883,12 +5883,14 @@ var h3_top, styl_btn_one, styl_btn_registerGo, styl_btn_return, styl_btn_two, st
 
 styl_btn_registerGo = function() {
   return {
-    width: .3 * ww,
-    height: .3 * wh,
-    backgroundColor: 'magenta',
-    color: 'snow',
+    cursor: 'pointer',
+    width: .44 * ww,
+    height: .24 * wh,
+    backgroundColor: 'lightgrey',
+    color: 'darkslategrey',
     fontFamily: 'sans',
-    fontSize: .2 * wh
+    fontSize: .032 * wh,
+    margin: .01 * wh
   };
 };
 
@@ -5920,23 +5922,24 @@ styl_login = function() {};
 styl_pwd_ipt = function() {
   return {
     width: .18 * ww,
-    height: .12 * wh,
+    height: .032 * wh,
     textAlign: 'center',
-    fontSize: .08 * wh,
+    fontSize: .020 * wh,
     color: 'gold',
-    backgroundColor: 'beige'
+    backgroundColor: 'darkslategrey',
+    margin: .01 * wh
   };
 };
 
 styl_email_ipt = function() {
   return {
+    margin: .004 * wh,
     color: 'gold',
-    backgroundColor: 'azure',
-    width: .72 * ww,
-    height: .12 * wh,
+    width: .58 * ww,
+    height: .04 * wh,
     textAlign: 'center',
-    fontSize: .08 * wh,
-    backgroundColor: 'azure'
+    fontSize: .024 * wh,
+    backgroundColor: 'darkslategrey'
   };
 };
 
@@ -5989,11 +5992,11 @@ styl_ufo = function() {
 h3_top = function() {
   return {
     fontFamily: 'sans',
-    fontSize: .04 * wh,
-    marginBottom: .2 * wh,
-    marginTop: .1 * wh,
+    fontSize: .034 * wh,
+    marginBottom: .002 * wh,
+    marginTop: .002 * wh,
     cursor: 'pointer',
-    color: 'chartreuse'
+    color: 'darkkhaki'
   };
 };
 
@@ -49065,18 +49068,31 @@ var api;
 
 api = {};
 
+api.registerGo = function({state, action}) {
+  state = state.set('mood_status', "justRegistered:waiting");
+  c(action.payload, 'action.payload');
+  return state = state.setIn(['effects', shortid()], {
+    type: 'msg_server',
+    payload: {
+      type: 'registerGo',
+      payload: action.payload
+    }
+  });
+};
+
+// email: action.payload.email
+// pwd: action.payload.pwd
 api.register_check_avail = function({state, action}) {
   return state = state.setIn(['effects', shortid()], {
     type: 'msg_server',
     payload: {
       type: 'register_check_avail',
-      payload: {
-        candide: action.payload.candide
-      }
+      payload: action.payload
     }
   });
 };
 
+// candide: action.payload.candide
 api.nav_register = function({state, action}) {
   c('going');
   return state.set('navi', 'register');
@@ -49092,6 +49108,7 @@ exports.default = api;
 exports.default = {
   hornet: {
     // jobs: Imm.Map({})
+    mood_status: 'ufo',
     navi: 'register',
     effects: Imm.Map({
       [`${shortid()}`]: {
@@ -49106,27 +49123,29 @@ exports.default = {
 /* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arq, effects_f, keys_arq;
+var api, effects_f, keys_api;
 
-arq = {};
+api = {};
 
 // arq = assign arq, require('./side_effects/init.coffee').default
-arq = assign(arq, __webpack_require__(111).default);
+api = fp.assign(api, __webpack_require__(111).default);
 
-keys_arq = keys(arq);
+keys_api = keys(api);
 
 effects_f = function({store}) {
   return function({state_js}) {
-    var effect, key_id, ref, results, state;
+    var effect, key_id, payload, ref, results, state, type;
     state = state_js;
     ref = state.hornet.effects;
     results = [];
     for (key_id in ref) {
       effect = ref[key_id];
-      if (includes(keys_arq, effect.type)) {
-        results.push(arq[effect.type]({effect, store}));
+      c(effect, 'effect');
+      ({type, payload} = effect);
+      if (_.includes(keys_api, effect.type)) {
+        results.push(api[effect.type]({effect, store}));
       } else {
-        results.push(void 0);
+        results.push(c("No Op in effects on type:", type));
       }
     }
     return results;
@@ -49146,7 +49165,9 @@ api = {};
 
 api.msg_server = function({effect, state}) {
   var payload, type;
+  c('have');
   ({type, payload} = effect.payload);
+  c('writing', type);
   return primus.write({type, payload});
 };
 
@@ -49418,10 +49439,12 @@ comp = rr({
     return {
       email: null,
       pwd: null,
-      candide: null
+      candide: null,
+      mood_status: 'ufo'
     };
   },
   render: function() {
+    // c "state.disable", @state
     return div({
       style: styl_register_ctr()
     }, div({
@@ -49432,6 +49455,7 @@ comp = rr({
       style: styl_email_ipt(),
       placeholder: 'Email',
       type: 'text',
+      disabled: this.state.mood_status === 'justRegistered:waiting',
       onChange: (e) => {
         this.props.check_avail({
           candide: e.currentTarget.value
@@ -49443,6 +49467,7 @@ comp = rr({
       }
     }), input({
       style: styl_pwd_ipt(),
+      disabled: this.state.mood_status === 'justRegistered:waiting',
       placeholder: 'password',
       type: 'password',
       onChange: (e) => {
@@ -49452,10 +49477,14 @@ comp = rr({
       }
     }), button({
       style: styl_btn_registerGo(),
+      disabled: this.state.mood_status === 'justRegistered:waiting',
       onClick: () => {
-        return this.props.registerGo({
+        this.props.registerGo({
           email: this.state.email,
           pwd: this.state.pwd
+        });
+        return this.setState({
+          mood_status: 'justRegistered:waiting'
         });
       }
     }, "Register!"), button({
@@ -49472,6 +49501,7 @@ map_state_to_props = function(state) {
 map_dispatch_to_props = function(dispatch) {
   return {
     registerGo: function({email, pwd}) {
+      c('dispactch with email & pwd', email, pwd);
       return dispatch({
         type: 'registerGo',
         payload: {email, pwd}
