@@ -2,8 +2,12 @@
 
 home = rc require('../scenes/home.coffee').default
 
+
+ufo = rc require('../scenes/ufo.coffee').default
+
 render = ->
-    home()
+    ufo()
+    # home()
 
 comp = rr
     render: render

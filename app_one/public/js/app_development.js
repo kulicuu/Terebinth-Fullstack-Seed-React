@@ -47802,7 +47802,7 @@ exports.default = lookup;
 /***/ (function(module, exports) {
 
 exports.default = {
-  lookup: {
+  hornet: {
     // jobs: Imm.Map({})
     effects: Imm.Map({
       [`${shortid()}`]: {
@@ -47887,14 +47887,17 @@ exports.default = api;
 /* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var comp, home, map_dispatch_to_props, map_state_to_props, render;
+var comp, home, map_dispatch_to_props, map_state_to_props, render, ufo;
 
 home = rc(__webpack_require__(105).default);
 
+ufo = rc(__webpack_require__(106).default);
+
 render = function() {
-  return home();
+  return ufo();
 };
 
+// home()
 comp = rr({
   render: render
 });
@@ -47987,6 +47990,41 @@ comp = rr({
 });
 
 map_state_to_props = function(state) {
+  return state.get('hornet').toJS();
+};
+
+map_dispatch_to_props = function(dispatch) {
+  return {};
+};
+
+exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 106 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_ufo;
+
+({styl_ufo, h3_top} = __webpack_require__(107));
+
+comp = rr({
+  getInitialState: function() {
+    return {
+      klass: 'ufo'
+    };
+  },
+  render: function() {
+    c('rendiring');
+    return div({
+      style: styl_ufo()
+    }, h3({
+      style: h3_top()
+    }, "hornet :: open-source social-media pattern"));
+  }
+});
+
+map_state_to_props = function(state) {
   return state.get('lookup').toJS();
 };
 
@@ -47995,6 +48033,36 @@ map_dispatch_to_props = function(dispatch) {
 };
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 107 */
+/***/ (function(module, exports) {
+
+var h3_top, styl_login, styl_register, styl_ufo;
+
+styl_register = function() {};
+
+styl_login = function() {};
+
+styl_ufo = function() {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'floralwhite',
+    alignItems: 'center'
+  };
+};
+
+h3_top = function() {
+  return {
+    fontSize: .08 * wh,
+    cursor: 'pointer',
+    color: 'chartreuse'
+  };
+};
+
+module.exports = {h3_top, styl_register, styl_login, styl_ufo};
 
 
 /***/ })
