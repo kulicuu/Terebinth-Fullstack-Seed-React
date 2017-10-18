@@ -78,7 +78,7 @@ app_one_primus.use 'session', primus_session, { store: app_one_redis_store }
 app_one_primus.save path.join(app_one_arq.public_dir, '/js' , '/primus.js')
 
 
-# the_api = require('./app_one_layer_control/index').default
+the_api = require('./api_one/hornet.coffee').default
 
 
 app_one_server.listen app_one_arq.port, ->
@@ -87,18 +87,12 @@ app_one_server.listen app_one_arq.port, ->
 
 app_one_primus.on 'connection', (spark) ->
     # dispatch to concord if want state
+    c spark, 'spark'
     spark.on 'data', (data) ->
 
         c data, 'data'
 
-        # the_api
-        #     type: data.type
-        #     payload: data.payload
-        #     spark: spark
-
-            # spark.write
-            #     type: 'lookup_resp'
-            #     payload: the_api
-            #         # prefix: data.payload.prefix_text
-            #         opts:
-            #             lookup_type: 'lookup_prefix_000'
+        the_api
+            type: data.type
+            payload: data.payload
+            spark: spark

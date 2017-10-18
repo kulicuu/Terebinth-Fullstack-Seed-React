@@ -6,8 +6,9 @@ api = {}
 
 
 api.register_check_avail = ({ state, action }) ->
+
     state = state.setIn ['effects', shortid()],
-        type: 'generic_primus_write'
+        type: 'msg_server'
         payload:
             type: 'register_check_avail'
             payload:

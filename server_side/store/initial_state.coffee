@@ -14,11 +14,14 @@ module.exports = ({
 
     primary_state =
         log_cache: log_cache
+
         effects: Imm.Map({})
+
+        app_one_primus: app_one_primus # TODO rename hornet primus
+
         ufo_sessions: Imm.Map({})
-        lounger_sessions: Imm.Map({})
-        app_one_primus: app_one_primus
-        chat_log: Imm.List([])
+        hornet: Imm.Map({})
+        hornet_sessions: Imm.Map({})
 
     state = fp.assign state, primary_state
 
