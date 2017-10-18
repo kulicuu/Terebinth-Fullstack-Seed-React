@@ -8,9 +8,9 @@ thunk = require('redux-thunk').default
 middleware = thunk
 
 
-lookup = require('./reducers/lookup.coffee').default
+hornet = require('./reducers/hornet.coffee').default
 
-reducers = { lookup }
+reducers = { hornet }
 
 initial_state = require('./initial_state.coffee').default
 

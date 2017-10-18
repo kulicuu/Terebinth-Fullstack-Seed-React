@@ -12,7 +12,7 @@ keys_arq = keys arq
 effects_f = ({ store }) ->
     ({ state_js }) ->
         state = state_js
-        for key_id, effect of state.lookup.effects
+        for key_id, effect of state.hornet.effects
             if includes(keys_arq, effect.type)
                 arq[effect.type] { effect , store }
 

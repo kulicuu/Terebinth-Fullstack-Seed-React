@@ -47495,7 +47495,7 @@ window.onload = function() {
 /* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var applyMiddleware, combineReducers, compose, createStore, effect_trigger_f, effects, imm_initial_state, initial_state, lookup, middleware, reducers, set, state_js, store, thunk;
+var applyMiddleware, combineReducers, compose, createStore, effect_trigger_f, effects, hornet, imm_initial_state, initial_state, middleware, reducers, set, state_js, store, thunk;
 
 ({applyMiddleware, compose, createStore} = __webpack_require__(27));
 
@@ -47505,9 +47505,9 @@ thunk = __webpack_require__(99).default;
 
 middleware = thunk;
 
-lookup = __webpack_require__(100).default;
+hornet = __webpack_require__(108).default;
 
-reducers = {lookup};
+reducers = {hornet};
 
 initial_state = __webpack_require__(101).default;
 
@@ -47744,66 +47744,14 @@ thunk.withExtraArgument = createThunkMiddleware;
 exports['default'] = thunk;
 
 /***/ }),
-/* 100 */
-/***/ (function(module, exports) {
-
-var api, incoming_effects_api, keys_api, keys_incoming_effects_api, lookup;
-
-api = {};
-
-incoming_effects_api = {};
-
-// concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
-//     state.setIn ['dctn_blob'], data.payload.blob
-keys_incoming_effects_api = keys(incoming_effects_api);
-
-api['primus:data'] = function({state, action}) {
-  var data, payload, type;
-  ({data} = action.payload);
-  ({type, payload} = action.payload.data);
-  if (includes(keys_incoming_effects_api, type)) {
-    return incoming_effects_api[type]({state, action, data});
-  } else {
-    return state;
-  }
-};
-
-// these that require primus write sideeffects can be
-// handled by a single function from now on so additions
-// should require code edits in fewer places.
-api['primus_hotwire'] = function({state, action}) {
-  return state.setIn(['effects', shortid()], {
-    type: 'primus_hotwire',
-    payload: action.payload
-  });
-};
-
-// arq['search_struct'] = ({ state, action }) ->
-//     state.setIn ['desires', shortid()],
-//         type: 'search_struct_nodemem'
-//         payload: action.payload
-keys_api = keys(api);
-
-lookup = function(state, action) {
-  state = state.setIn(['effects'], Imm.Map({}));
-  if (includes(keys_api, action.type)) {
-    return api[action.type]({state, action});
-  } else {
-    c('noop with ', action.type);
-    return state;
-  }
-};
-
-exports.default = lookup;
-
-
-/***/ }),
+/* 100 */,
 /* 101 */
 /***/ (function(module, exports) {
 
 exports.default = {
   hornet: {
     // jobs: Imm.Map({})
+    navi: 'ufo',
     effects: Imm.Map({
       [`${shortid()}`]: {
         type: 'init_primus'
@@ -47830,7 +47778,7 @@ effects_f = function({store}) {
   return function({state_js}) {
     var effect, key_id, ref, results, state;
     state = state_js;
-    ref = state.lookup.effects;
+    ref = state.hornet.effects;
     results = [];
     for (key_id in ref) {
       effect = ref[key_id];
@@ -47894,7 +47842,10 @@ home = rc(__webpack_require__(105).default);
 ufo = rc(__webpack_require__(106).default);
 
 render = function() {
-  return ufo();
+  switch (this.props.navi) {
+    case 'ufo':
+      return ufo();
+  }
 };
 
 // home()
@@ -47903,7 +47854,7 @@ comp = rr({
 });
 
 map_state_to_props = function(state) {
-  return {};
+  return state.get('hornet').toJS();
 };
 
 map_dispatch_to_props = function(dispatch) {
@@ -48004,9 +47955,9 @@ exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
 /* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_ufo;
+var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_btn_one, styl_btn_two, styl_options_ctr, styl_ufo;
 
-({styl_ufo, h3_top} = __webpack_require__(107));
+({styl_btn_two, styl_options_ctr, styl_ufo, h3_top, styl_btn_one} = __webpack_require__(107));
 
 comp = rr({
   getInitialState: function() {
@@ -48020,16 +47971,39 @@ comp = rr({
       style: styl_ufo()
     }, h3({
       style: h3_top()
-    }, "hornet :: open-source social-media pattern"));
+    }, "hornet :: open-source social-media pattern"), div({
+      style: styl_options_ctr()
+    }, button({
+      style: styl_btn_two(),
+      onClick: function() {
+        return this.props.nav_login();
+      }
+    }, "login"), button({
+      style: styl_btn_one(),
+      onClick: function() {
+        return this.props.nav_register();
+      }
+    }, "register")));
   }
 });
 
 map_state_to_props = function(state) {
-  return state.get('lookup').toJS();
+  return state.get('hornet').toJS();
 };
 
 map_dispatch_to_props = function(dispatch) {
-  return {};
+  return {
+    nav_register: function() {
+      return dispatch({
+        type: 'nav_register'
+      });
+    },
+    nav_login: function() {
+      return dispatch({
+        type: 'login'
+      });
+    }
+  };
 };
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
@@ -48039,11 +48013,48 @@ exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
 /* 107 */
 /***/ (function(module, exports) {
 
-var h3_top, styl_login, styl_register, styl_ufo;
+var h3_top, styl_btn_one, styl_btn_two, styl_login, styl_options_ctr, styl_register, styl_ufo;
 
 styl_register = function() {};
 
 styl_login = function() {};
+
+styl_options_ctr = function() {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: .6 * wh,
+    width: ww
+  };
+};
+
+styl_btn_one = function() {
+  return {
+    width: .12 * ww,
+    height: .048 * wh,
+    // borderRadius: .02 * wh
+    fontFamily: 'sans',
+    fontSize: .02 * wh,
+    color: 'darkslategrey',
+    backgroundColor: 'ivory',
+    cursor: 'pointer'
+  };
+};
+
+styl_btn_two = function() {
+  return {
+    width: .2 * ww,
+    height: .2 * wh,
+    borderRadius: .02 * wh,
+    fontFamily: 'sans',
+    fontSize: .045 * wh,
+    color: 'darkslategrey',
+    backgroundColor: 'ivory',
+    cursor: 'pointer'
+  };
+};
 
 styl_ufo = function() {
   return {
@@ -48056,13 +48067,66 @@ styl_ufo = function() {
 
 h3_top = function() {
   return {
-    fontSize: .08 * wh,
+    fontFamily: 'sans',
+    fontSize: .04 * wh,
+    marginBottom: .2 * wh,
+    marginTop: .1 * wh,
     cursor: 'pointer',
     color: 'chartreuse'
   };
 };
 
-module.exports = {h3_top, styl_register, styl_login, styl_ufo};
+module.exports = {styl_btn_two, styl_options_ctr, h3_top, styl_register, styl_login, styl_ufo, styl_btn_one};
+
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports) {
+
+var api, hornet, incoming_effects_api, keys_api, keys_incoming_effects_api;
+
+api = {};
+
+incoming_effects_api = {};
+
+// concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
+//     state.setIn ['dctn_blob'], data.payload.blob
+keys_incoming_effects_api = keys(incoming_effects_api);
+
+api['primus:data'] = function({state, action}) {
+  var data, payload, type;
+  ({data} = action.payload);
+  ({type, payload} = action.payload.data);
+  if (includes(keys_incoming_effects_api, type)) {
+    return incoming_effects_api[type]({state, action, data});
+  } else {
+    return state;
+  }
+};
+
+// these that require primus write sideeffects can be
+// handled by a single function from now on so additions
+// should require code edits in fewer places.
+api['primus_hotwire'] = function({state, action}) {
+  return state.setIn(['effects', shortid()], {
+    type: 'primus_hotwire',
+    payload: action.payload
+  });
+};
+
+keys_api = keys(api);
+
+hornet = function(state, action) {
+  state = state.setIn(['effects'], Imm.Map({}));
+  if (includes(keys_api, action.type)) {
+    return api[action.type]({state, action});
+  } else {
+    c('No Op returned on type: ', action.type);
+    return state;
+  }
+};
+
+exports.default = hornet;
 
 
 /***/ })

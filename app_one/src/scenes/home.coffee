@@ -2,7 +2,6 @@
 
 
 
-
 map_idx_to_color = (idx) ->
     switch idx % 5
         when 0 then 'springgreen'
@@ -10,10 +9,6 @@ map_idx_to_color = (idx) ->
         when 2 then 'mintcream'
         when 3 then 'moccasin'
         when 4 then 'lightgoldenrodyellow'
-
-
-
-
 
 
 
