@@ -8,7 +8,6 @@ comp = rr
         klass: 'ufo'
 
     render: ->
-        c 'rendiring'
         div
             style: styl_ufo()
             h3
@@ -19,12 +18,12 @@ comp = rr
 
                 button
                     style: styl_btn_two()
-                    onClick: -> @props.nav_login()
+                    onClick: @props.nav_login
                     "login"
 
                 button
                     style: styl_btn_one()
-                    onClick: -> @props.nav_register()
+                    onClick: @props.nav_register
                     "register"
 
 
@@ -38,7 +37,7 @@ map_dispatch_to_props = (dispatch) ->
         dispatch { type: 'nav_register' }
 
     nav_login: ->
-        dispatch { type : 'login'}
+        dispatch { type : 'nav_login'}
 
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp)

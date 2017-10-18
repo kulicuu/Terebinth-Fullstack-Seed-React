@@ -4,11 +4,17 @@ home = rc require('../scenes/home.coffee').default
 
 
 ufo = rc require('../scenes/ufo.coffee').default
+login = rc require('../scenes/ufo/login.coffee').default
+register = rc require('../scenes/ufo/register.coffee').default
 
 render = ->
     switch @props.navi
         when 'ufo'
             ufo()
+        when 'login'
+            login()
+        when 'register'
+            register()
         else
             # home()
 

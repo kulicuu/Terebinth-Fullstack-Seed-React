@@ -2,7 +2,7 @@ exports.default =
     hornet:
         # jobs: Imm.Map({})
 
-        navi: 'ufo'
+        navi: 'register'
 
         effects : Imm.Map
             "#{shortid()}":

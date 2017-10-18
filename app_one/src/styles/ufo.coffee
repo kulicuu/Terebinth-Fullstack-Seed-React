@@ -1,14 +1,57 @@
 
 
+styl_btn_registerGo = ->
+    width: .3 * ww
+    height: .3 * wh
+    backgroundColor: 'magenta'
+    color: 'snow'
+    fontFamily: 'sans'
+    fontSize: .2 * wh
+
+
+styl_btn_return = ->
+
+
+styl_register_ctr = ->
+    display: 'flex'
+    alignItems: 'center'
+    justifyContent: 'center'
+    height:  wh
 
 
 styl_register = ->
+    display: 'flex'
+    flexDirection: 'column'
+    justifyContent: 'space-between'
+
+    alignItems: 'center'
+    width: .6 * ww
+    height: .8 * wh
 
 
 
 
 styl_login = ->
+    # textAlign: 'center'
 
+
+styl_pwd_ipt = ->
+    width: .18 * ww
+    height: .12 * wh
+    textAlign: 'center'
+    fontSize: .08 * wh
+    color: 'gold'
+    backgroundColor: 'beige'
+
+
+styl_email_ipt = ->
+    color: 'gold'
+    backgroundColor: 'azure'
+    width: .72 * ww
+    height: .12 * wh
+    textAlign: 'center'
+    fontSize: .08 * wh
+    backgroundColor: 'azure'
 
 styl_options_ctr = ->
     display: 'flex'
@@ -60,4 +103,12 @@ h3_top = ->
 
 
 
-module.exports = { styl_btn_two, styl_options_ctr, h3_top, styl_register, styl_login, styl_ufo, styl_btn_one }
+module.exports = {
+    styl_email_ipt
+    , styl_btn_registerGo
+    , styl_btn_return
+    , styl_register_ctr
+    , styl_register
+    , styl_pwd_ipt
+    , styl_btn_two, styl_options_ctr, h3_top, styl_register, styl_login, styl_ufo, styl_btn_one
+}

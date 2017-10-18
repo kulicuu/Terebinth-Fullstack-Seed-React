@@ -1,6 +1,10 @@
 
 
 api = {}
+api = fp.assign api, require('./navigation.coffee').default
+api = fp.assign api, require('./register.coffee').default
+
+c 'keys now hornet model updater / reducer api', _.keys(api)
 
 
 incoming_effects_api = {}
