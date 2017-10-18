@@ -113,4 +113,4 @@ dev_server = ({ env, cs }) ->
                 #             lookup_type: 'lookup_prefix_000'
 
 
-require('./concord/reincarnate.coffee') { dev_server }
+require('./store/reincarnate.coffee') { dev_server }

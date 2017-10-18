@@ -47446,7 +47446,7 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 /* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Provider, nexus, root_component, root_el, set_and_render, store;
+var Provider, nexus, root_component, root_el, set_and_render, spacer_component, store;
 
 root_el = document.getElementById('root');
 
@@ -47458,24 +47458,31 @@ nexus = rc(__webpack_require__(104).default);
 
 root_component = rr({
   render: function() {
-    var wh, ww;
-    ({ww, wh} = this.props);
     return Provider({
       store: store
-    }, nexus({
-      ww: .9893 * ww,
-      wh: wh
-    }));
+    }, nexus());
   }
 });
 
+spacer_component = function() {
+  return div({
+    style: {
+      width: '100%',
+      height: '100%',
+      color: 'snow'
+    }
+  });
+};
+
 set_and_render = function() {
   var height, width;
-  ({width, height} = root_el.getBoundingClientRect());
-  return React_DOM.render(root_component({
-    ww: width,
-    wh: height
-  }), root_el);
+  ({width, height} = root_el.getBoundingClientRect()); // remove the props in favor of the global
+  window.ww = width;
+  window.wh = height;
+  React_DOM.render(spacer_component(), root_el);
+  return setTimeout(function() {
+    return React_DOM.render(root_component(), root_el);
+  }, 10);
 };
 
 window.onload = function() {
@@ -47885,9 +47892,7 @@ var comp, home, map_dispatch_to_props, map_state_to_props, render;
 home = rc(__webpack_require__(105).default);
 
 render = function() {
-  var wh, ww;
-  ({ww, wh} = this.props);
-  return home({ww, wh});
+  return home();
 };
 
 comp = rr({
@@ -47933,8 +47938,7 @@ comp = rr({
     };
   },
   render: function() {
-    var idx, wh, ww;
-    ({ww, wh} = this.props);
+    var idx;
     return div({
       className: "home"
     }, (function() {

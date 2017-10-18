@@ -5,6 +5,9 @@
 # There is also a logging to Redis functionality, which would in a fuller
 # implementation would implement a structured logging capability.
 
+# This could be valuable during development enabling persistent state / config in spite of process restarts
+# for code changes 
+
 # c = console.log.bind console
 # Redis = require 'redis'
 # redis = Redis.createClient()

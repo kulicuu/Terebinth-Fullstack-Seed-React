@@ -22,7 +22,6 @@ comp = rr
         hovering: -1
 
     render: ->
-        { ww, wh } = @props
         div
             className: "home"
             for idx in [0 .. 100]

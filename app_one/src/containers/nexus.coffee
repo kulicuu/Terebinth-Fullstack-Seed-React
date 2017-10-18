@@ -3,8 +3,7 @@
 home = rc require('../scenes/home.coffee').default
 
 render = ->
-    { ww, wh } = @props
-    home { ww, wh }
+    home()
 
 comp = rr
     render: render
