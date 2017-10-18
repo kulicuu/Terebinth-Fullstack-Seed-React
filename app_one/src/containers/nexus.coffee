@@ -7,8 +7,13 @@ ufo = rc require('../scenes/ufo.coffee').default
 login = rc require('../scenes/ufo/login.coffee').default
 register = rc require('../scenes/ufo/register.coffee').default
 
+
+cell = rc require('../scenes/cell.coffee').default
+
 render = ->
     switch @props.navi
+        when 'cell'
+            cell()
         when 'ufo'
             ufo()
         when 'login'

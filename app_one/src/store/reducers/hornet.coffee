@@ -4,10 +4,10 @@ api = {}
 api = fp.assign api, require('./navigation.coffee').default
 api = fp.assign api, require('./register.coffee').default
 
-c 'keys now hornet model updater / reducer api', _.keys(api)
 
 
 incoming_effects_api = {}
+incoming_effects_api = fp.assign incoming_effects_api, require('./register.coffee').incoming
 
 
 # concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->

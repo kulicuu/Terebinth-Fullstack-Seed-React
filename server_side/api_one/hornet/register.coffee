@@ -6,16 +6,18 @@ api = {}
 
 
 
+hornet_f = ({ email }) ->
+    email: email
+    dateCreated: Date.now()
+    lastLogin: Date.now()
+    profileCompletion: "new_hornet"
+
 
 
 api.registerGo = ({ payload, spark }) ->
     { email, pwd } = payload
 
-
-
     hornet_id = v4()
-
-
 
     bcrypt.genSalt 10, (err, salt) ->
         if err
@@ -31,11 +33,13 @@ api.registerGo = ({ payload, spark }) ->
                         email: email
                         hash: hash
                     .then (re2) ->
+                        hornet = hornet_f { email }
                         spark.write
                             type: 'res_registerGo'
                             payload:
                                 status: 'okGood'
                                 clientToken: 'placeholder'
+                                hornet: hornet
 
 
 

@@ -48996,9 +48996,9 @@ api = fp.assign(api, __webpack_require__(107).default);
 
 api = fp.assign(api, __webpack_require__(108).default);
 
-c('keys now hornet model updater / reducer api', _.keys(api));
-
 incoming_effects_api = {};
+
+incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(108).incoming);
 
 // concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
 //     state.setIn ['dctn_blob'], data.payload.blob
@@ -49064,7 +49064,26 @@ exports.default = api;
 /* 108 */
 /***/ (function(module, exports) {
 
-var api;
+var api, incoming_api;
+
+incoming_api = {};
+
+// concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
+//     state.setIn ['dctn_blob'], data.payload.blob
+incoming_api.res_registerGo = function({state, action, data}) {
+  var client_token, hornet;
+  if (data.payload.status === "okGood") {
+    ({client_token, hornet} = data.payload);
+    state = state.set('navi', 'cell');
+    state = state.set('hornet', hornet);
+    state = state.set('client_token', client_token);
+    return state;
+  } else {
+    return state;
+  }
+};
+
+exports.incoming = incoming_api;
 
 api = {};
 
@@ -49204,7 +49223,7 @@ exports.default = api;
 /* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var comp, home, login, map_dispatch_to_props, map_state_to_props, register, render, ufo;
+var cell, comp, home, login, map_dispatch_to_props, map_state_to_props, register, render, ufo;
 
 home = rc(__webpack_require__(113).default);
 
@@ -49214,8 +49233,12 @@ login = rc(__webpack_require__(115).default);
 
 register = rc(__webpack_require__(116).default);
 
+cell = rc(__webpack_require__(117).default);
+
 render = function() {
   switch (this.props.navi) {
+    case 'cell':
+      return cell();
     case 'ufo':
       return ufo();
     case 'login':
@@ -49521,6 +49544,88 @@ map_dispatch_to_props = function(dispatch) {
     nav_login: function() {
       return dispatch({
         type: 'login'
+      });
+    }
+  };
+};
+
+exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Profile Home
+var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_btn_one, styl_btn_two, styl_options_ctr, styl_ufo;
+
+({styl_btn_two, styl_options_ctr, styl_ufo, h3_top, styl_btn_one} = __webpack_require__(16));
+
+comp = rr({
+  // component
+  getInitialState: function() {
+    if (this.props.hornet.profileCompletion === 'new_hornet') {
+      return {
+        interaction_mode: 'introductions',
+        intros_state: 'beginning'
+      };
+    } else {
+      return {
+        interaction_mode: 'standard'
+      };
+    }
+  },
+  componentWillReceiveProps: function(nextProps) {
+    // if some condition in the hornet specs it we should start the introductions.
+    if (nextProps.hornet.profileCompletion === 'new_hornet') {
+      return this.setState({
+        interaction_mode: 'introductions',
+        intros_state: 'beginning'
+      });
+    } else {
+      return this.setState({
+        interaction_mode: 'standard'
+      });
+    }
+  },
+  render: function() {
+    switch (this.state.interaction_mode) {
+      case 'introductions':
+        switch (this.state.intros_state) {
+          case 'beginning':
+            return div(null, "beginning introductions");
+          default:
+            return div(null, 'continuing introductions');
+        }
+        break;
+      default:
+        return div({
+          style: styl_ufo()
+        }, h3({
+          style: h3_top()
+        }, "hornet :: open-source social-media pattern"), h3({
+          style: h3_top()
+        }, "user profile hornet cell"), button({
+          style: {}
+        }, "Logout"));
+    }
+  }
+});
+
+map_state_to_props = function(state) {
+  return state.get('hornet').toJS();
+};
+
+map_dispatch_to_props = function(dispatch) {
+  return {
+    nav_register: function() {
+      return dispatch({
+        type: 'nav_register'
+      });
+    },
+    nav_login: function() {
+      return dispatch({
+        type: 'nav_login'
       });
     }
   };
