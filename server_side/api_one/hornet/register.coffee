@@ -46,32 +46,24 @@ api.registerGo = ({ payload, spark }) ->
         else
             c 'salt', salt
             bcrypt.hash pwd, salt, (err2, hash) ->
+                c 'hashi in register', hash
                 if err2
                     c "#{color.red('handle error', on)}"
                 else
                     hornet = hornet_f { email, hash }
                     hornet_safe = hornet_safe_f { hornet }
-                    # chunk = msgpack.encode hornet
-                    #
-                    # c 'chunk', chunk
-                    # decrypted = msgpack.decode chunk
-                    # c 'decrypted', decrypted
+
                     redis.evalshaAsync register_lua_sha, 1, 'hornet', JSON.stringify(hornet)
                     .then (re3) ->
-                        # i 'lua returns', msgpack.decode(re3)
                         res = JSON.parse re3
-
-                        c 're3', res
                         if res[0] is "Ok"
-                            c 'is okay'
                             spark.write
                                 type: 'res_registerGo'
                                 payload:
                                     status: 'okGood'
                                     hornet: hornet_safe
                         else
-                            c 'something else'
-
+                            c "handle bad password etc messaging."
 
                     # redis.hmsetAsync hornet_id, hornet
                     # .then (re2) ->

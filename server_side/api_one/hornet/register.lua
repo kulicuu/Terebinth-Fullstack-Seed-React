@@ -33,7 +33,7 @@ local profileCompletion = hornet['profileCompletion']
 local hash = hornet['hash']
 
 
-redis.call('hmset', hornet['hornetId'], 'clientToken', 'hornetId', 'email', 'dateCreated', 'lastLogin', 'profileCompletion', 'hash', clientToken, hornetId, email, dateCreated, lastLogin, profileCompletion, hash)
+redis.call('hmset', hornet['hornetId'], 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
 
 
 redis.call('hset', 'hornets_emails', email, hornetId)
