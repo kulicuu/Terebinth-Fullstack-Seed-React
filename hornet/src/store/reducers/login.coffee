@@ -14,8 +14,11 @@ incoming_api = {}
 
 
 incoming_api.res_loginGo = ({ state, action, data }) ->
-    if data.payload.status is "okGood"
-        { client_token, hornet } = data.payload
+    c "tetetetetete", data, data.payload.status
+    if data.payload.status is "okClear"
+
+        c 'good', data.payload.payload
+        { client_token, hornet } = data.payload.payload
         state = state.set 'navi', 'cell'
         state = state.set 'hornet', hornet
         state = state.set 'client_token', client_token

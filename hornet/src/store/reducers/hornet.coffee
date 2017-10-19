@@ -10,6 +10,7 @@ api = fp.assign api, require('./login.coffee').default
 
 incoming_effects_api = {}
 incoming_effects_api = fp.assign incoming_effects_api, require('./register.coffee').incoming
+incoming_effects_api = fp.assign incoming_effects_api, require('./login.coffee').incoming
 
 
 # concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
@@ -20,11 +21,14 @@ keys_incoming_effects_api = keys incoming_effects_api
 
 
 api['primus:data'] = ({ state, action }) ->
+    c 'basic 000'
     { data } = action.payload
     { type, payload } = action.payload.data
     if includes(keys_incoming_effects_api, type)
+        c " has key"
         incoming_effects_api[type] { state, action, data }
     else
+        c "No Op in primus:data handler of main reducer. With type: ", type
         state
 
 
@@ -41,8 +45,10 @@ keys_api = keys api
 
 
 hornet = (state, action) ->
+    c 'store is dispatched'
     state = state.setIn ['effects'], Imm.Map({})
     if includes(keys_api, action.type)
+        c 'has effect'
         api[action.type]({ state, action })
     else
         c 'No Op returned on type: ', action.type

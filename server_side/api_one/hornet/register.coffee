@@ -28,12 +28,9 @@ api.registerGo = ({ payload, spark }) ->
                 if err2
                     c "#{color.red('handle error', on)}"
                 else
-                    redis.hmsetAsync hornet_id,
-                        hornet_id: hornet_id
-                        email: email
-                        hash: hash
+                    hornet = hornet_f { email }
+                    redis.hmsetAsync hornet_id, hornet
                     .then (re2) ->
-                        hornet = hornet_f { email }
                         spark.write
                             type: 'res_registerGo'
                             payload:

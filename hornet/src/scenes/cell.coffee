@@ -11,6 +11,7 @@ comp = rr
     # component
 
     getInitialState: ->
+        c 'in initial state with props', @props
         if @props.hornet.profileCompletion is 'new_hornet'
             interaction_mode: 'introductions'
             intros_state: 'beginning'
@@ -31,6 +32,7 @@ comp = rr
 
 
     render: ->
+        c 'in render, props are', @props
         switch @state.interaction_mode
             when 'introductions'
                 switch @state.intros_state

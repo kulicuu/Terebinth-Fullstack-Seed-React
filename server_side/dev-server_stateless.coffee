@@ -14,12 +14,12 @@ http = require 'http'
 Primus = require 'primus'
 
 
-app_one_arq = do ->
+hornet_data = do ->
     cookie_parser_secret = 'astenhu093gp.0e9ce'
     cookies = cookie_parser cookie_parser_secret
     cookie_parser_secret: cookie_parser_secret
     cookies: cookies
-    public_dir: path.resolve('..', 'app_one', 'public')
+    public_dir: path.resolve('..', 'hornet', 'public')
     index_path: '/dev_index.html'
     port: 2223
     primus_opts:
@@ -30,10 +30,11 @@ express_session = require 'express-session'
 connect_redis = require 'connect-redis'
 Redis_Store = connect_redis express_session
 
-app_one_redis_store_opts = {}
-app_one_redis_store = new Redis_Store(app_one_redis_store_opts)
+hornet_redis_store_opts = {}
+hornet_redis_store = new Redis_Store(hornet_redis_store_opts)
 
 
+# TODO Implementation details  of Primus-specific sessions.
 primus_session = (options) ->
     key = options.key or 'connect.sid'
     store = options.store
@@ -53,45 +54,44 @@ primus_session = (options) ->
             next()
 
 
-app_one = express()
+hornet = express()
 
 
-app_one.all '/', (req, res, next) ->
+# This may not be necessary iwth the usage of static services.
+hornet.all '/', (req, res, next) ->
     c color.purple(req.url, on)
-    res.sendFile path.join(app_one_arq.public_dir, app_one_arq.index_path)
+    res.sendFile path.join(hornet_data.public_dir, hornet_data.index_path)
 
 
-app_one.use express.static(app_one_arq.public_dir)
+hornet.use express.static(hornet_data.public_dir)
 
 
-app_one_server = http.createServer app_one
+hornet_server = http.createServer hornet
 
 
-opts_app_one_primus =
+opts_hornet_primus =
     transformer: 'websockets'
 
 
-app_one_primus = new Primus(app_one_server, app_one_arq.primus_opts)
+hornet_primus = new Primus(hornet_server, hornet_data.primus_opts)
 
-app_one_primus.use 'cookies', app_one_arq.cookies
-app_one_primus.use 'session', primus_session, { store: app_one_redis_store }
-app_one_primus.save path.join(app_one_arq.public_dir, '/js' , '/primus.js')
+hornet_primus.use 'cookies', hornet_data.cookies
+hornet_primus.use 'session', primus_session, { store: hornet_redis_store }
+hornet_primus.save path.join(hornet_data.public_dir, '/js' , '/primus.js')
 
 
 the_api = require('./api_one/hornet.coffee').default
 
 
-app_one_server.listen app_one_arq.port, ->
-    c 'server on', app_one_arq.port
+hornet_server.listen hornet_data.port, ->
+    c 'server on', hornet_data.port
 
 
-app_one_primus.on 'connection', (spark) ->
+hornet_primus.on 'connection', (spark) ->
     # dispatch to concord if want state
     c spark, 'spark'
     spark.on 'data', (data) ->
-
         c data, 'data'
-
         the_api
             type: data.type
             payload: data.payload

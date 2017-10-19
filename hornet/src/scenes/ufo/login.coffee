@@ -50,8 +50,6 @@ comp = rr
                 "LOGIN"
 
 
-
-
 map_state_to_props = (state) ->
     state.get('hornet').toJS()
 

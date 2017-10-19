@@ -24,7 +24,7 @@ api['primus_hotwire'] = ({ effect, state }) ->
 
 
 api['init_primus'] = ({ effect, store }) ->
-    c 'initialising primus'
+    c 'initialising primus', store
     primus.on 'data', (data) ->
         c 'primus received data', data
         store.dispatch
