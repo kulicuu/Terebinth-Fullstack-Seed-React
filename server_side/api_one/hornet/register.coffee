@@ -24,11 +24,16 @@ api = {}
 
 
 hornet_f = ({ email, hash }) ->
+    clientToken: v4()
+    hornetId: v4()
     email: email
     dateCreated: Date.now()
     lastLogin: Date.now()
     profileCompletion: "new_hornet"
     hash: hash
+
+hornet_safe_f = ({ hornet }) ->
+    fp.omit hornet, ['hash', 'hornetId' ]
 
 
 # lua variant
@@ -45,9 +50,29 @@ api.registerGo = ({ payload, spark }) ->
                     c "#{color.red('handle error', on)}"
                 else
                     hornet = hornet_f { email, hash }
-                    redis.evalshaAsync register_lua_sha, 0
+                    hornet_safe = hornet_safe_f { hornet }
+                    # chunk = msgpack.encode hornet
+                    #
+                    # c 'chunk', chunk
+                    # decrypted = msgpack.decode chunk
+                    # c 'decrypted', decrypted
+                    redis.evalshaAsync register_lua_sha, 1, 'hornet', JSON.stringify(hornet)
                     .then (re3) ->
-                        i 'lua returns', re3
+                        # i 'lua returns', msgpack.decode(re3)
+                        res = JSON.parse re3
+
+                        c 're3', res
+                        if res[0] is "Ok"
+                            c 'is okay'
+                            spark.write
+                                type: 'res_registerGo'
+                                payload:
+                                    status: 'okGood'
+                                    hornet: hornet_safe
+                        else
+                            c 'something else'
+
+
                     # redis.hmsetAsync hornet_id, hornet
                     # .then (re2) ->
                     #     spark.write

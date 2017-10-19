@@ -12,6 +12,9 @@ global.j = ( msg0, msg1 ) -> c "#{color.red(msg0, on)}  :  #{color.cyan(msg1, on
 global.i = ( msg0, msg1 ) -> c "#{color.cyan(msg0, on)} :   #{color.green(msg1, on)}"
 
 
+global.msgpack = require 'msgpack-lite'
+
+
 
 global._ = require 'lodash'
 global.fp = require 'lodash/fp'
