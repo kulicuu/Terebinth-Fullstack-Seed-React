@@ -78,7 +78,6 @@ map_state_to_props = (state) ->
 map_dispatch_to_props = (dispatch) ->
 
     registerGo: ({ email, pwd }) ->
-        c 'dispactch with email & pwd', email, pwd
         dispatch
             type: 'registerGo'
             payload: { email, pwd }

@@ -2,7 +2,9 @@
 
 api = {}
 api = fp.assign api, require('./navigation.coffee').default
+# api = fp.assign api, require('./ufo.coffee').default
 api = fp.assign api, require('./register.coffee').default
+api = fp.assign api, require('./login.coffee').default
 
 
 

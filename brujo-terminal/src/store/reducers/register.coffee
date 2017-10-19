@@ -34,18 +34,12 @@ exports.incoming = incoming_api
 
 
 
-
-
-
-
-
 api = {}
 
 
 
 api.registerGo = ({ state, action }) ->
     state = state.set 'mood_status', "justRegistered:waiting"
-    c action.payload, 'action.payload'
     state = state.setIn ['effects', shortid()],
         type: 'msg_server'
         payload:
@@ -62,9 +56,7 @@ api.register_check_avail = ({ state, action }) ->
             payload: action.payload
                 # candide: action.payload.candide
 
-api.nav_register = ({ state, action }) ->
-    c 'going'
-    state.set 'navi', 'register'
+
 
 
 

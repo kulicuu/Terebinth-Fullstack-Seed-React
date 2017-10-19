@@ -4,7 +4,7 @@ exports.default =
 
         mood_status: 'ufo'
 
-        navi: 'register'
+        navi: 'ufo'
 
         effects : Imm.Map
             "#{shortid()}":

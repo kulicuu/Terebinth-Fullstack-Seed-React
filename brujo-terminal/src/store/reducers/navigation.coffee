@@ -5,6 +5,10 @@
 api = {}
 
 
+api.nav_ufo = ({ state, action }) ->
+    state.set 'navi', 'ufo'
+
+
 api.nav_login = ({ state, action }) ->
     state.set 'navi', 'login'
 

@@ -11,6 +11,7 @@ register = rc require('../scenes/ufo/register.coffee').default
 cell = rc require('../scenes/cell.coffee').default
 
 render = ->
+    c @props, '@props'
     switch @props.navi
         when 'cell'
             cell()

@@ -6,6 +6,7 @@
 
 api = {}
 api = fp.assign api, require('./hornet/register').default
+api = fp.assign api, require('./hornet/login').default
 
 
 

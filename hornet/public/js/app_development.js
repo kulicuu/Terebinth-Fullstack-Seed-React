@@ -48994,7 +48994,10 @@ api = {};
 
 api = fp.assign(api, __webpack_require__(107).default);
 
+// api = fp.assign api, require('./ufo.coffee').default
 api = fp.assign(api, __webpack_require__(108).default);
+
+api = fp.assign(api, __webpack_require__(118).default);
 
 incoming_effects_api = {};
 
@@ -49048,6 +49051,10 @@ var api;
 
 api = {};
 
+api.nav_ufo = function({state, action}) {
+  return state.set('navi', 'ufo');
+};
+
 api.nav_login = function({state, action}) {
   return state.set('navi', 'login');
 };
@@ -49089,7 +49096,6 @@ api = {};
 
 api.registerGo = function({state, action}) {
   state = state.set('mood_status', "justRegistered:waiting");
-  c(action.payload, 'action.payload');
   return state = state.setIn(['effects', shortid()], {
     type: 'msg_server',
     payload: {
@@ -49112,11 +49118,6 @@ api.register_check_avail = function({state, action}) {
 };
 
 // candide: action.payload.candide
-api.nav_register = function({state, action}) {
-  c('going');
-  return state.set('navi', 'register');
-};
-
 exports.default = api;
 
 
@@ -49128,7 +49129,7 @@ exports.default = {
   hornet: {
     // jobs: Imm.Map({})
     mood_status: 'ufo',
-    navi: 'register',
+    navi: 'ufo',
     effects: Imm.Map({
       [`${shortid()}`]: {
         type: 'init_primus'
@@ -49236,6 +49237,7 @@ register = rc(__webpack_require__(116).default);
 cell = rc(__webpack_require__(117).default);
 
 render = function() {
+  c(this.props, '@props');
   switch (this.props.navi) {
     case 'cell':
       return cell();
@@ -49408,14 +49410,16 @@ exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_btn_one, styl_btn_two, styl_options_ctr, styl_ufo;
+var comp, h3_top, map_dispatch_to_props, map_state_to_props, styl_btn_one, styl_btn_registerGo, styl_btn_return, styl_btn_two, styl_email_ipt, styl_options_ctr, styl_pwd_ipt, styl_register, styl_register_ctr, styl_ufo;
 
-({styl_btn_two, styl_options_ctr, styl_ufo, h3_top, styl_btn_one} = __webpack_require__(16));
+({styl_register_ctr, styl_btn_registerGo, styl_btn_return, styl_btn_two, styl_options_ctr, styl_ufo, h3_top, styl_btn_one, styl_email_ipt, styl_pwd_ipt, styl_register} = __webpack_require__(16));
 
 comp = rr({
   getInitialState: function() {
     return {
-      klass: 'ufo'
+      mood_status: 'ready',
+      email: null,
+      pwd: null
     };
   },
   render: function() {
@@ -49423,7 +49427,38 @@ comp = rr({
       style: styl_ufo()
     }, h3({
       style: h3_top()
-    }, "login"));
+    }, "login"), input({
+      style: styl_email_ipt(),
+      placeholder: 'Email',
+      type: 'text',
+      disabled: this.state.mood_status === 'justLogggedIn:waiting',
+      onChange: (e) => {
+        return this.setState({
+          email: e.currentTarget.value
+        });
+      }
+    }), input({
+      style: styl_pwd_ipt(),
+      disabled: this.state.mood_status === 'justLogggedIn:waiting',
+      placeholder: 'Password',
+      onChange: (e) => {
+        return this.setState({
+          pwd: e.currentTarget.value
+        });
+      }
+    }), button({
+      style: styl_btn_registerGo(),
+      disabled: (this.state.mood_status === 'justLogggedIn:waiting') || (this.state.mood_status !== 'ready'),
+      onClick: () => {
+        this.setState({
+          mood_status: 'justLogggedIn:waiting'
+        });
+        return this.props.loginGo({
+          email: this.state.email,
+          pwd: this.state.pwd
+        });
+      }
+    }, "LOGIN"));
   }
 });
 
@@ -49433,14 +49468,10 @@ map_state_to_props = function(state) {
 
 map_dispatch_to_props = function(dispatch) {
   return {
-    nav_register: function() {
+    loginGo: function({email, pwd}) {
       return dispatch({
-        type: 'nav_register'
-      });
-    },
-    nav_login: function() {
-      return dispatch({
-        type: 'login'
+        type: 'loginGo',
+        payload: {email, pwd}
       });
     }
   };
@@ -49524,7 +49555,6 @@ map_state_to_props = function(state) {
 map_dispatch_to_props = function(dispatch) {
   return {
     registerGo: function({email, pwd}) {
-      c('dispactch with email & pwd', email, pwd);
       return dispatch({
         type: 'registerGo',
         payload: {email, pwd}
@@ -49632,6 +49662,47 @@ map_dispatch_to_props = function(dispatch) {
 };
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports) {
+
+var api, incoming_api;
+
+incoming_api = {};
+
+// concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
+//     state.setIn ['dctn_blob'], data.payload.blob
+incoming_api.res_loginGo = function({state, action, data}) {
+  var client_token, hornet;
+  if (data.payload.status === "okGood") {
+    ({client_token, hornet} = data.payload);
+    state = state.set('navi', 'cell');
+    state = state.set('hornet', hornet);
+    state = state.set('client_token', client_token);
+    return state;
+  } else {
+    return state;
+  }
+};
+
+exports.incoming = incoming_api;
+
+api = {};
+
+api.loginGo = function({state, action}) {
+  state = state.set('mood_status', "justRegistered:waiting");
+  return state = state.setIn(['effects', shortid()], {
+    type: 'msg_server',
+    payload: {
+      type: 'loginGo',
+      payload: action.payload
+    }
+  });
+};
+
+exports.default = api;
 
 
 /***/ })
