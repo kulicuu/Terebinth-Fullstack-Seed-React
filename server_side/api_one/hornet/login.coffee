@@ -19,14 +19,7 @@ fs.readFile path.resolve(__dirname, 'login.lua'), 'utf8', (err, blob) ->
                 login_lua_sha = sha
 
 
-
-
-
 api = {}
-
-
-
-
 
 
 api.loginGo = ({ payload, spark }) ->
@@ -34,6 +27,7 @@ api.loginGo = ({ payload, spark }) ->
 
     redis.hgetAsync 'hornets_emails', email
     .then (hornet_id) ->
+        c 'hornet_id', hornet_id
         if hornet_id is null
             spark.write
                 type: 'res_loginGo'
@@ -56,12 +50,10 @@ api.loginGo = ({ payload, spark }) ->
                             c 'res2', res2
                             if res2 is true
                                 c 'handle case accepted.'
-
-                                redis.evalshaAsync login_lua_sha, 1, 'hornetId', hornet_id
+                                clientToken = v4()
+                                redis.evalshaAsync login_lua_sha, 2, 'hornetId', hornet_id, 'clientToken', clientToken
                                 .then (re3) ->
-                                    c re3
                                     hornet = JSON.parse(re3)
-                                    clientToken = v4()
                                     redis.hsetAsync hornet_id, 'clientToken', clientToken
 
                                     # redis.setAsync clientToken, hornet_id
@@ -79,7 +71,7 @@ api.loginGo = ({ payload, spark }) ->
                                 spark.write
                                     type: 'res_loginGo'
                                     payload:
-                                        status: 'okClear'
+                                        status: 'rejected'
                                         payload: { hornet, clientToken }
 
 

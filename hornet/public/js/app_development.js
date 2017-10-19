@@ -49134,6 +49134,16 @@ incoming_effects_api.res_wakeup = function({state, action, data}) {
 
 keys_incoming_effects_api = keys(incoming_effects_api);
 
+api.logout = function({state, action}) {
+  c('basic 4');
+  state = state.setIn(['effects', shortid()], {
+    type: 'delete_clientToken'
+  });
+  state = state.set('mood_status', 'ufo');
+  state = state.set('navi', 'ufo');
+  return state;
+};
+
 api.res_fetch_clientToken = function({state, action}) {
   var clientToken;
   c('basic 001');
@@ -49283,6 +49293,10 @@ exports.default = effects_f;
 var api;
 
 api = {};
+
+api.delete_clientToken = function({effect, state}) {
+  return localStorage.removeItem('hornet_clientToken');
+};
 
 api.set_clientToken = function({effect, state}) {
   var clientToken;
@@ -49747,8 +49761,9 @@ comp = rr({
             return div({}, "beginning introductions", button({
               style: {}
             }, "Skip"), button({
-              style: {}
-            }, "Logout"));
+              style: {},
+              onClick: this.props.logout
+            }, "Logoaaaut"));
           default:
             return div(null, 'continuing introductions');
         }
@@ -49761,8 +49776,9 @@ comp = rr({
         }, "hornet :: open-source social-media pattern"), h3({
           style: h3_top()
         }, "user profile hornet cell"), button({
-          style: {}
-        }, "Logout"));
+          style: {},
+          onClick: this.props.logout
+        }, "Logoaaaut"));
     }
   }
 });
@@ -49773,6 +49789,11 @@ map_state_to_props = function(state) {
 
 map_dispatch_to_props = function(dispatch) {
   return {
+    logout: function() {
+      return dispatch({
+        type: 'logout'
+      });
+    },
     nav_register: function() {
       return dispatch({
         type: 'nav_register'

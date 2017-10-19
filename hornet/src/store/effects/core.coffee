@@ -4,6 +4,8 @@ api = {}
 
 
 
+api.delete_clientToken = ({ effect, state }) ->
+    localStorage.removeItem 'hornet_clientToken'
 
 api.set_clientToken = ({ effect, state }) ->
     { clientToken } = effect.payload

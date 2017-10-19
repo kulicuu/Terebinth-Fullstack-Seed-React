@@ -45,7 +45,8 @@ comp = rr
                                 "Skip"
                             button
                                 style: {}
-                                "Logout"
+                                onClick: @props.logout
+                                "Logoaaaut"
 
                     else
                         div null, 'continuing introductions'
@@ -63,7 +64,8 @@ comp = rr
 
                     button
                         style: {}
-                        "Logout"
+                        onClick: @props.logout
+                        "Logoaaaut"
 
 
 map_state_to_props = (state) ->
@@ -71,6 +73,10 @@ map_state_to_props = (state) ->
 
 
 map_dispatch_to_props = (dispatch) ->
+    logout: ->
+        dispatch { type: 'logout' }
+
+
     nav_register: ->
         dispatch { type: 'nav_register' }
 

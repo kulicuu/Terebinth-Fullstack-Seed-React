@@ -39,6 +39,15 @@ keys_incoming_effects_api = keys incoming_effects_api
 
 
 
+api.logout = ({ state, action }) ->
+    c 'basic 4'
+    state = state.setIn ['effects', shortid()],
+        type: 'delete_clientToken'
+    state = state.set 'mood_status', 'ufo'
+    state = state.set 'navi', 'ufo'
+    state
+
+
 api.res_fetch_clientToken = ({ state, action }) ->
     c 'basic 001'
     { clientToken } = action.payload
