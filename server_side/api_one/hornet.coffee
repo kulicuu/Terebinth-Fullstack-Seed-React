@@ -1,6 +1,19 @@
 
 
+wakeup_lua_sha = null
+wakeup_lua_blob = null
 
+
+fs.readFile path.resolve(__dirname, 'hornet', 'wakeup.lua'), 'utf8', (err, blob) ->
+    if err
+        c err
+    else
+        wakeup_lua_blob = blob
+        redis.script 'load', blob, (err1, sha) ->
+            if err1
+                c err1
+            else
+                wakeup_lua_sha = sha
 
 
 
@@ -17,8 +30,28 @@ api = fp.assign api, require('./hornet/login').default
 
 
 api.wakeup_refresh_w_clientToken = ({ payload, spark }) ->
-    c 'payload', payload
+
+    c '\n\n'
+    c 'payloetetettetetead', payload
+    c '\n\n'
     { clientToken } = payload
+
+
+    redis.get clientToken, (err, re838) ->
+        c 're838', re838
+
+    redis.evalshaAsync wakeup_lua_sha, 1, 'clientToken', JSON.stringify({clientToken})
+    .then (re34) ->
+        c "#{color.cyan('re34', on)} #{color.green(re34, on)}"
+        spark.write
+            type: 'res_loginGo'
+            payload:
+                status: "OkClear"
+                hornet: JSON.parse(re34)
+    .error (lua_err) ->
+        j 'lua err', lua_err
+        c lua_err
+
     # we should be able to fetch a hornet based on this which means
     # it's isomorphic with a user_id, should it just be the user_id ?
     # It shouldn't be specific to the server, because same client might get

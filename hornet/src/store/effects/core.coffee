@@ -12,9 +12,9 @@ api.set_clientToken = ({ effect, state }) ->
 
 
 api.msg_server = ({ effect, state }) ->
-    c 'have'
+    # c 'have'
     { type, payload } = effect.payload
-    c 'writing', type
+    # c 'writing', type
     primus.write { type, payload }
 
 
@@ -49,8 +49,8 @@ api['init_primus'] = ({ effect, store }) ->
 
     setInterval =>
         primus.write
-            type: 'request_orient'
-    , 1000
+            type: 'polling'
+    , 2000
 
 
 exports.default = api

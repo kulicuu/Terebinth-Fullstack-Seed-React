@@ -4,13 +4,13 @@
 
 
 
+
 local hornet = cjson.decode(ARGV[1])
 
--- redis.call('publish', 'hornet', tostring(x1))
--- redis.call('publish', 'hornet', x1[2])
--- print(x1[1])
 
--- redis.call('hmset', ipairs(hornet['hornet']))
+local payload = ARGV[1]
+local hornet = cjson.decode(payload)
+
 
 local keys = {}
 local vals = {}
@@ -22,7 +22,6 @@ for k, v in pairs(hornet) do
     vals[idx] = v
     idx = idx + 1
 end
-
 
 local clientToken = hornet['clientToken']
 local hornetId = hornet['hornetId']
@@ -40,7 +39,6 @@ redis.call('hset', 'hornets_emails', email, hornetId)
 
 redis.call('set', clientToken, hornetId)
 redis.call('expire', clientToken, 120)
-
 
 
 

@@ -49268,9 +49268,9 @@ api.set_clientToken = function({effect, state}) {
 
 api.msg_server = function({effect, state}) {
   var payload, type;
-  c('have');
+  // c 'have'
   ({type, payload} = effect.payload);
-  c('writing', type);
+  // c 'writing', type
   return primus.write({type, payload});
 };
 
@@ -49306,9 +49306,9 @@ api['init_primus'] = function({effect, store}) {
   });
   return setInterval(() => {
     return primus.write({
-      type: 'request_orient'
+      type: 'polling'
     });
-  }, 1000);
+  }, 2000);
 };
 
 exports.default = api;
