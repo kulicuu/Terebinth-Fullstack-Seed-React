@@ -64,8 +64,8 @@ api.loginGo = ({ payload, spark }) ->
                                     clientToken = v4()
                                     redis.hsetAsync hornet_id, 'clientToken', clientToken
 
-                                    redis.setAsync clientToken, hornet_id
-                                    redis.expireAsync clientToken, 120
+                                    # redis.setAsync clientToken, hornet_id
+                                    # redis.expireAsync clientToken, 120
 
                                     c 'res', hornet
                                     spark.write

@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-local hornet = cjson.decode(ARGV[1])
-
-
 local payload = ARGV[1]
 local hornet = cjson.decode(payload)
 
@@ -32,15 +22,22 @@ local profileCompletion = hornet['profileCompletion']
 local hash = hornet['hash']
 
 
-redis.call('hmset', hornet['hornetId'], 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
+-- redis.call('hmset', hornet['hornetId'], 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
 
 
-redis.call('hset', 'hornets_emails', email, hornetId)
-
-redis.call('set', clientToken, hornetId)
-redis.call('expire', clientToken, 120)
+redis.call('hmset', hornetId, 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
 
 
 
+local check_zero = redis.call('hset', 'hornets_emails', email, hornetId)
 
+local check_one = redis.call('set', clientToken, hornetId)
+
+-- return cjson.encode({ check_one, check_zero, clientToken, hornetId })
+
+local check_two = redis.call('expire', clientToken, 2400)
+--
+--
+--
+--
 return cjson.encode({"Ok"})

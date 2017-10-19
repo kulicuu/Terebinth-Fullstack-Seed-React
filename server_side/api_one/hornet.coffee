@@ -36,13 +36,14 @@ api.wakeup_refresh_w_clientToken = ({ payload, spark }) ->
     c '\n\n'
     { clientToken } = payload
 
-
+    c 'have clientToken', clientToken
     redis.get clientToken, (err, re838) ->
         c 're838', re838
 
     redis.evalshaAsync wakeup_lua_sha, 1, 'clientToken', JSON.stringify({clientToken})
     .then (re34) ->
         c "#{color.cyan('re34', on)} #{color.green(re34, on)}"
+        c re34
         spark.write
             type: 'res_wakeup'
             payload:

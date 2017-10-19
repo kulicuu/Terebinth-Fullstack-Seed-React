@@ -1,32 +1,16 @@
-
-
-
-
-
-
-
 local raw = ARGV[1]
 local payload = cjson.decode(raw)
 
 local clientToken = payload['clientToken']
 
 
-
--- return clientToken
-
-
 local hornetId = redis.call('get', clientToken)
 
--- return hornetId
-
-if hornetId == nil then
-    payload = {}
-    payload['status'] = "It's not so good."
+if hornetId == false then
+    local payload = {}
+    payload['status'] = "UFO"
     return cjson.encode(payload)
-    -- return
-
 else
-    -- return hornetId
     local hornetTable = {}
     local hornetRayy = redis.call('hgetall', hornetId)
     hornetTable['email'] = hornetRayy[6]
@@ -34,7 +18,13 @@ else
     hornetTable['lastLogin'] = hornetRayy[10]
     hornetTable['profileCompletion'] = hornetRayy[12]
 
-    return cjson.encode(hornetTable)
 
+    local payload = {}
+
+    payload.status = "OkClear"
+    payload.hornet = hornetTable
+
+
+    return cjson.encode(payload)
 
 end

@@ -16,10 +16,14 @@ incoming_api = {}
 incoming_api.res_registerGo = ({ state, action, data }) ->
     if data.payload.status is "okGood"
         c data.payload, 'data.payload'
-        { client_token, hornet } = data.payload
+        { clientToken, hornet } = data.payload
+
         state = state.set 'navi', 'cell'
         state = state.set 'hornet', hornet
-        state = state.set 'client_token', client_token
+        state = state.set 'client_token', clientToken
+        state = state.setIn ['effects', shortid()],
+            type: 'set_clientToken'
+            payload: { clientToken }
         state
     else
         state

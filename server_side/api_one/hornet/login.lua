@@ -23,7 +23,7 @@ hornetTable['lastLogin'] = hornetRayy[10]
 
 
 redis.call('set', clientToken, hornetId)
-redis.call('expire', clientToken, 120)
+redis.call('expire', clientToken, 2400)
 
 
 
