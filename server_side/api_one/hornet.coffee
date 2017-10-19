@@ -20,8 +20,10 @@ fs.readFile path.resolve(__dirname, 'hornet', 'wakeup.lua'), 'utf8', (err, blob)
 api = {}
 
 
+api = fp.assign api, require('./hornet/nest').default
 api = fp.assign api, require('./hornet/register').default
 api = fp.assign api, require('./hornet/login').default
+
 
 
 

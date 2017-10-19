@@ -49113,9 +49113,7 @@ incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).i
 incoming_effects_api.res_wakeup = function({state, action, data}) {
   var clientToken, hornet;
   c(data.payload);
-  c('993939393939393939');
   if (data.payload.status === "OkClear") {
-    c('is');
     ({hornet, clientToken} = data.payload);
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
@@ -49124,6 +49122,13 @@ incoming_effects_api.res_wakeup = function({state, action, data}) {
     state = state.setIn(['effects', shortid()], {
       type: 'set_clientToken',
       payload: {clientToken}
+    });
+    state = state.setIn(['effects', shortid()], {
+      type: 'msg_server',
+      payload: {
+        type: 'get_nest',
+        payload: {clientToken}
+      }
     });
     return state;
   } else {
