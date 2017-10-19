@@ -8,4 +8,6 @@ exports.default =
 
         effects : Imm.Map
             "#{shortid()}":
+                type: 'fetch_clientToken'
+            "#{shortid()}":
                 type: 'init_primus'

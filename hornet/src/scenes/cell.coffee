@@ -38,7 +38,15 @@ comp = rr
             when 'introductions'
                 switch @state.intros_state
                     when 'beginning'
-                        div null, "beginning introductions"
+                        div {},
+                            "beginning introductions"
+                            button
+                                style: {}
+                                "Skip"
+                            button
+                                style: {}
+                                "Logout"
+
                     else
                         div null, 'continuing introductions'
 

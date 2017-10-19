@@ -4,6 +4,13 @@ api = {}
 
 
 
+
+api.set_clientToken = ({ effect, state }) ->
+    { clientToken } = effect.payload
+
+    localStorage.setItem 'hornet_clientToken', clientToken
+
+
 api.msg_server = ({ effect, state }) ->
     c 'have'
     { type, payload } = effect.payload
@@ -21,6 +28,15 @@ api['primus_hotwire'] = ({ effect, state }) ->
 #     primus.write
 #         type: 'build_selection'
 #         payload: desire.payload
+
+
+api.fetch_clientToken = ({ effect, store }) ->
+    'fetching clientToken'
+    clientToken = localStorage.getItem 'hornet_clientToken'
+    c 'clientToken', clientToken
+    store.dispatch
+        type: 'res_fetch_clientToken'
+        payload: { clientToken }
 
 
 api['init_primus'] = ({ effect, store }) ->

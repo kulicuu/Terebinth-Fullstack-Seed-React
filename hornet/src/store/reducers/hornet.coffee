@@ -20,6 +20,27 @@ incoming_effects_api = fp.assign incoming_effects_api, require('./login.coffee')
 keys_incoming_effects_api = keys incoming_effects_api
 
 
+
+api.res_fetch_clientToken = ({ state, action }) ->
+    c 'basic 001'
+    { clientToken } = action.payload
+    state = state.set 'clientToken', clientToken
+    if clientToken isnt null
+        state = state.setIn ['effects', shortid()],
+            type: 'msg_server'
+            payload:
+                type: 'wakeup_refresh_w_clientToken'
+                payload: { clientToken }
+
+    else
+        state = state.set 'mood_status', 'ufo'
+        state = state.set 'navi', 'ufo'
+
+
+    state
+
+
+
 api['primus:data'] = ({ state, action }) ->
     c 'basic 000'
     { data } = action.payload

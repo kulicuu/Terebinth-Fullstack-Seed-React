@@ -7401,6 +7401,10 @@ incoming_api.res_loginGo = function({state, action, data}) {
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
     state = state.set('mood_status', 'hornet_cell');
+    state = state.setIn(['effects', shortid], {
+      type: 'set_clientToken',
+      payload: {clientToken}
+    });
     return state;
   } else {
     return state;
@@ -49106,6 +49110,26 @@ incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).i
 //     state.setIn ['dctn_blob'], data.payload.blob
 keys_incoming_effects_api = keys(incoming_effects_api);
 
+api.res_fetch_clientToken = function({state, action}) {
+  var clientToken;
+  c('basic 001');
+  ({clientToken} = action.payload);
+  state = state.set('clientToken', clientToken);
+  if (clientToken !== null) {
+    state = state.setIn(['effects', shortid()], {
+      type: 'msg_server',
+      payload: {
+        type: 'wakeup_refresh_w_clientToken',
+        payload: {clientToken}
+      }
+    });
+  } else {
+    state = state.set('mood_status', 'ufo');
+    state = state.set('navi', 'ufo');
+  }
+  return state;
+};
+
 api['primus:data'] = function({state, action}) {
   var data, payload, type;
   c('basic 000');
@@ -49182,6 +49206,9 @@ exports.default = {
     navi: 'ufo',
     effects: Imm.Map({
       [`${shortid()}`]: {
+        type: 'fetch_clientToken'
+      },
+      [`${shortid()}`]: {
         type: 'init_primus'
       }
     })
@@ -49233,6 +49260,12 @@ var api;
 
 api = {};
 
+api.set_clientToken = function({effect, state}) {
+  var clientToken;
+  ({clientToken} = effect.payload);
+  return localStorage.setItem('hornet_clientToken', clientToken);
+};
+
 api.msg_server = function({effect, state}) {
   var payload, type;
   c('have');
@@ -49251,6 +49284,17 @@ api['primus_hotwire'] = function({effect, state}) {
 //     primus.write
 //         type: 'build_selection'
 //         payload: desire.payload
+api.fetch_clientToken = function({effect, store}) {
+  'fetching clientToken';
+  var clientToken;
+  clientToken = localStorage.getItem('hornet_clientToken');
+  c('clientToken', clientToken);
+  return store.dispatch({
+    type: 'res_fetch_clientToken',
+    payload: {clientToken}
+  });
+};
+
 api['init_primus'] = function({effect, store}) {
   c('initialising primus', store);
   primus.on('data', function(data) {
@@ -49676,7 +49720,11 @@ comp = rr({
       case 'introductions':
         switch (this.state.intros_state) {
           case 'beginning':
-            return div(null, "beginning introductions");
+            return div({}, "beginning introductions", button({
+              style: {}
+            }, "Skip"), button({
+              style: {}
+            }, "Logout"));
           default:
             return div(null, 'continuing introductions');
         }

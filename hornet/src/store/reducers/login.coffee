@@ -20,6 +20,9 @@ incoming_api.res_loginGo = ({ state, action, data }) ->
         state = state.set 'hornet', hornet
         state = state.set 'client_token', clientToken
         state = state.set 'mood_status', 'hornet_cell'
+        state = state.setIn ['effects', shortid],
+            type: 'set_clientToken'
+            payload: { clientToken }
         state
     else
         state
