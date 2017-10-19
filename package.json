@@ -18,6 +18,7 @@
         "immutable": "latest",
         "keymirror": "latest",
         "lodash": "latest",
+        "msgpack-lite": "latest",
         "node-uuid": "latest",
         "primus": "latest",
         "react": "latest",
