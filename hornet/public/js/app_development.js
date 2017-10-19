@@ -7394,14 +7394,13 @@ incoming_api = {};
 // concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
 //     state.setIn ['dctn_blob'], data.payload.blob
 incoming_api.res_loginGo = function({state, action, data}) {
-  var client_token, hornet;
-  c("tetetetetete", data, data.payload.status);
+  var clientToken, hornet;
   if (data.payload.status === "okClear") {
-    c('good', data.payload.payload);
-    ({client_token, hornet} = data.payload.payload);
+    ({clientToken, hornet} = data.payload.payload);
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
-    state = state.set('client_token', client_token);
+    state = state.set('client_token', clientToken);
+    state = state.set('mood_status', 'hornet_cell');
     return state;
   } else {
     return state;
@@ -49659,6 +49658,7 @@ comp = rr({
   },
   componentWillReceiveProps: function(nextProps) {
     // if some condition in the hornet specs it we should start the introductions.
+    c('nextProps', nextProps);
     if (nextProps.hornet.profileCompletion === 'new_hornet') {
       return this.setState({
         interaction_mode: 'introductions',

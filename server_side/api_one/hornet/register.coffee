@@ -6,12 +6,12 @@ api = {}
 
 
 
-hornet_f = ({ email }) ->
+hornet_f = ({ email, hash }) ->
     email: email
     dateCreated: Date.now()
     lastLogin: Date.now()
     profileCompletion: "new_hornet"
-
+    hash: hash
 
 
 api.registerGo = ({ payload, spark }) ->
@@ -28,7 +28,7 @@ api.registerGo = ({ payload, spark }) ->
                 if err2
                     c "#{color.red('handle error', on)}"
                 else
-                    hornet = hornet_f { email }
+                    hornet = hornet_f { email, hash }
                     redis.hmsetAsync hornet_id, hornet
                     .then (re2) ->
                         spark.write

@@ -21,6 +21,7 @@ comp = rr
 
     componentWillReceiveProps: (nextProps) ->
         # if some condition in the hornet specs it we should start the introductions.
+        c 'nextProps', nextProps
         if nextProps.hornet.profileCompletion is 'new_hornet'
             @setState
                 interaction_mode: 'introductions'
