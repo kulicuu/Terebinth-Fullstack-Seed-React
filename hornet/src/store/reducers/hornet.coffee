@@ -13,8 +13,26 @@ incoming_effects_api = fp.assign incoming_effects_api, require('./register.coffe
 incoming_effects_api = fp.assign incoming_effects_api, require('./login.coffee').incoming
 
 
-# concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
-#     state.setIn ['dctn_blob'], data.payload.blob
+
+incoming_effects_api.res_wakeup = ({ state, action, data }) ->
+    c data.payload
+    c '993939393939393939'
+    if data.payload.status is "OkClear"
+        c 'is'
+        { hornet, clientToken } = data.payload
+        state = state.set 'navi', 'cell'
+        state = state.set 'hornet', hornet
+        state = state.set 'client_token', clientToken
+        state = state.set 'mood_status', 'hornet_cell'
+        state = state.setIn ['effects', shortid()],
+            type: 'set_clientToken'
+            payload: { clientToken }
+        state
+    else
+        c 'isnt'
+        state
+
+
 
 
 keys_incoming_effects_api = keys incoming_effects_api

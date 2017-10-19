@@ -7401,7 +7401,7 @@ incoming_api.res_loginGo = function({state, action, data}) {
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
     state = state.set('mood_status', 'hornet_cell');
-    state = state.setIn(['effects', shortid], {
+    state = state.setIn(['effects', shortid()], {
       type: 'set_clientToken',
       payload: {clientToken}
     });
@@ -49106,8 +49106,28 @@ incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(36).i
 
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).incoming);
 
-// concord_channel['dctn_initial_blob'] = ({ state, action, data }) ->
-//     state.setIn ['dctn_blob'], data.payload.blob
+incoming_effects_api.res_wakeup = function({state, action, data}) {
+  var clientToken, hornet;
+  c(data.payload);
+  c('993939393939393939');
+  if (data.payload.status === "OkClear") {
+    c('is');
+    ({hornet, clientToken} = data.payload);
+    state = state.set('navi', 'cell');
+    state = state.set('hornet', hornet);
+    state = state.set('client_token', clientToken);
+    state = state.set('mood_status', 'hornet_cell');
+    state = state.setIn(['effects', shortid()], {
+      type: 'set_clientToken',
+      payload: {clientToken}
+    });
+    return state;
+  } else {
+    c('isnt');
+    return state;
+  }
+};
+
 keys_incoming_effects_api = keys(incoming_effects_api);
 
 api.res_fetch_clientToken = function({state, action}) {

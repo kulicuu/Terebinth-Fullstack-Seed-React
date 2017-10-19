@@ -44,9 +44,10 @@ api.wakeup_refresh_w_clientToken = ({ payload, spark }) ->
     .then (re34) ->
         c "#{color.cyan('re34', on)} #{color.green(re34, on)}"
         spark.write
-            type: 'res_loginGo'
+            type: 'res_wakeup'
             payload:
                 status: "OkClear"
+                clientToken: clientToken
                 hornet: JSON.parse(re34)
     .error (lua_err) ->
         j 'lua err', lua_err
