@@ -49104,11 +49104,15 @@ api = fp.assign(api, __webpack_require__(36).default);
 
 api = fp.assign(api, __webpack_require__(37).default);
 
+api = fp.assign(api, __webpack_require__(119).default);
+
 incoming_effects_api = {};
 
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(36).incoming);
 
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).incoming);
+
+incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(119).incoming);
 
 incoming_effects_api.res_wakeup = function({state, action, data}) {
   var clientToken, hornet;
@@ -49758,12 +49762,26 @@ comp = rr({
     }
   },
   render: function() {
+    var idx;
     c('in render, props are', this.props);
+    c('nest in props', this.props.nest);
     switch (this.state.interaction_mode) {
       case 'introductions':
         switch (this.state.intros_state) {
           case 'beginning':
-            return div({}, "beginning introductions", button({
+            return div({}, "beginning introductions", div({
+              style: {
+                display: 'flex'
+              }
+            }, idx = 0, _.map(this.props.nest, function(v, k) {
+              return (function(v, k) {
+                if (v !== void 0) {
+                  return div({
+                    key: `hest:${idx++}`
+                  }, span(null, `${v.email}`), span(null, `${v.hornetId}`));
+                }
+              })(v, k);
+            })), button({
               style: {}
             }, "Skip"), button({
               style: {},
@@ -49780,7 +49798,19 @@ comp = rr({
           style: h3_top()
         }, "hornet :: open-source social-media pattern"), h3({
           style: h3_top()
-        }, "user profile hornet cell"), button({
+        }, "user profile hornet cell"), div({
+          style: {
+            display: 'flex'
+          }
+        }, idx = 0, _.map(this.props.nest, function(v, k) {
+          return (function(v, k) {
+            if (v !== void 0) {
+              return div({
+                key: `hest:${idx++}`
+              }, span(null, `email ${v.email}`), span(null, `id ${v.hornetId}`));
+            }
+          })(v, k);
+        })), button({
           style: {},
           onClick: this.props.logout
         }, "Logoaaaut"));
@@ -49813,6 +49843,38 @@ map_dispatch_to_props = function(dispatch) {
 };
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports) {
+
+var api, incoming_api;
+
+api = {};
+
+incoming_api = {};
+
+incoming_api.res_get_nest = function({state, action, data}) {
+  var nest, parsed;
+  c('data.payload on res_get_nest', data.payload);
+  parsed = JSON.parse(data.payload);
+  nest = _.reduce(parsed[0], function(acc, v, idx) {
+    if ((idx % 2) === 1) {
+      acc = [].concat(acc, v);
+      return acc;
+    } else {
+      return acc;
+    }
+  }, []);
+  c('nest', nest);
+  state = state.set('nest', Imm.List(nest));
+  return state;
+};
+
+exports.incoming = incoming_api;
+
+exports.default = api;
 
 
 /***/ })

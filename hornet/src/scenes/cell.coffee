@@ -34,12 +34,26 @@ comp = rr
 
     render: ->
         c 'in render, props are', @props
+        c 'nest in props', @props.nest
         switch @state.interaction_mode
             when 'introductions'
                 switch @state.intros_state
                     when 'beginning'
                         div {},
                             "beginning introductions"
+
+                            div
+                                style:
+                                    display: 'flex'
+                                idx = 0
+                                _.map @props.nest, (v, k) ->
+                                    do (v, k) ->
+                                        if v isnt undefined
+                                            div
+                                                key: "hest:#{idx++}"
+                                                span null, "#{v.email}"
+                                                span null, "#{v.hornetId}"
+
                             button
                                 style: {}
                                 "Skip"
@@ -60,6 +74,19 @@ comp = rr
                     h3
                         style: h3_top()
                         "user profile hornet cell"
+
+
+                    div
+                        style:
+                            display: 'flex'
+                        idx = 0
+                        _.map @props.nest, (v, k) ->
+                            do (v, k) ->
+                                if v isnt undefined
+                                    div
+                                        key: "hest:#{idx++}"
+                                        span null, "email #{v.email}"
+                                        span null, "id #{v.hornetId}"
 
 
                     button

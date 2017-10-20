@@ -80,19 +80,9 @@ hornet_primus.use 'session', primus_session, { store: hornet_redis_store }
 hornet_primus.save path.join(hornet_data.public_dir, '/js' , '/primus.js')
 
 
-the_api = require('./api_one/hornet.coffee').default
+
 
 
 hornet_server.listen hornet_data.port, ->
+    require("./'stateless'_primus_effect.coffee") { hornet_primus }
     c 'server on', hornet_data.port
-
-
-hornet_primus.on 'connection', (spark) ->
-    # dispatch to concord if want state
-    c spark, 'spark'
-    spark.on 'data', (data) ->
-        c data, 'data'
-        the_api
-            type: data.type
-            payload: data.payload
-            spark: spark

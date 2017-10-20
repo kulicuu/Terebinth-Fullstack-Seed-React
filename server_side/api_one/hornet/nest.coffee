@@ -28,8 +28,11 @@ api.get_nest = ({ payload, spark }) ->
     { clientToken } = payload
     redis.evalshaAsync nest_lua_sha, 1, 'clientToken', JSON.stringify({ clientToken })
     .then (re22) ->
-        c 're22', re22
 
+        c 're22', re22
+        spark.write
+            type: 'res_get_nest'
+            payload: re22
 
 
 

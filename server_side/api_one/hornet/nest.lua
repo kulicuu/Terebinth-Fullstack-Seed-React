@@ -21,15 +21,26 @@ else
     local table = {}
 
 
+
+    local counter = 0
     for k, v in pairs(hornet_email_id_rayy) do
+        counter = counter + 1
         local safe_hornet = {}
-        local unsafe_hornet = redis.call('hgetall', v)
-        -- safe_hornet['dateCreated'] = unsafe_hornet['dateCreated']
+        local unsafe_hornet = {}
+        unsafe_hornet = redis.call('hgetall', v)
+        safe_hornet['hornetId'] = unsafe_hornet[4]
+        -- local email = unsafe_hornet[6]
+        safe_hornet['email'] = unsafe_hornet[6]
+        safe_hornet['dateCreated'] = unsafe_hornet[8]
+        safe_hornet['lastLogin'] = unsafe_hornet[10]
+        safe_hornet['profileCompletion'] = unsafe_hornet[12]
+
+        table[counter] = safe_hornet
         -- safe_hornet['profileCompletion'] = unsafe_hornet['profileCompletion']
         -- safe_hornet['lastLogin'] = unsafe_hornet['lastLogin']
-        table[k] = unsafe_hornet
+
     end
 
-    return cjson.encode(table)
+    return cjson.encode({ table })
 
 end
