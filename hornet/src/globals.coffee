@@ -85,4 +85,15 @@ window.addEventListener 'hashchange', (e) ->
     c 'hashchange', e
     # prehash = location.href.split('#')[1]
     # if prehash isnt undefined
-    #     location.assign prehash
+    #     # location.assign '#' + prehash
+    #     if prehash.length is 0
+    #         store.dispatch
+    #             type: "nav_cell"
+    #     else
+    #         c 'else'
+    #         store.dispatch
+    #             type: "nav_" + prehash
+    # else
+    #         # location.assign '#'
+    #         store.dispatch
+    #             type: "nav_" + prehash

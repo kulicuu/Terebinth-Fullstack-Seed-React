@@ -17,6 +17,7 @@ else
     hornetTable['dateCreated'] = hornetRayy[8]
     hornetTable['lastLogin'] = hornetRayy[10]
     hornetTable['profileCompletion'] = hornetRayy[12]
+    hornetTable['status'] = "OkClear"
 
 
     local payload = {}
@@ -25,6 +26,6 @@ else
     payload.hornet = hornetTable
 
 
-    return cjson.encode(payload)
+    return cjson.encode(hornetTable)
 
 end

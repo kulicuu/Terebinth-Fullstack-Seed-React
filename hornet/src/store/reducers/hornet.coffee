@@ -16,22 +16,10 @@ incoming_effects_api = fp.assign incoming_effects_api, require('./nest.coffee').
 
 
 incoming_effects_api.res_wakeup = ({ state, action, data }) ->
-    c "WAAAKUUP"
-    c data.payload
-    navi = null
-    reloaded_navi = location.href.split('#')[1]
-    c 'reloaded_navi on wakeup', reloaded_navi
-
-
     if data.payload.status is "OkClear"
         { hornet, clientToken } = data.payload
-
-        if (reloaded_navi is undefined) or (reloaded_navi.length is 0)
-            navi = 'cell'
-        else
-            navi = reloaded_navi
-
-        state = state.set 'navi', navi
+        c 'res from wakeup', hornet
+        state = state.set 'navi', 'cell'
         state = state.set 'hornet', hornet
         state = state.set 'client_token', clientToken
         state = state.set 'mood_status', 'hornet_cell'
@@ -65,8 +53,9 @@ api.logout = ({ state, action }) ->
 
 
 api.res_fetch_clientToken = ({ state, action }) ->
-    c 'basic 001'
+
     { clientToken } = action.payload
+    c 'res on', clientToken
     state = state.set 'clientToken', clientToken
     if clientToken isnt null
         state = state.setIn ['effects', shortid()],
@@ -76,7 +65,6 @@ api.res_fetch_clientToken = ({ state, action }) ->
                 payload: { clientToken }
 
     else
-        location.assign '#'
         state = state.set 'mood_status', 'ufo'
         state = state.set 'navi', 'ufo'
 

@@ -20,6 +20,7 @@ comp = rr
 
 
     render: ->
+        c 'hornet', @props.hornet
         div
             style:
                 display: 'flex'
@@ -46,6 +47,9 @@ comp = rr
                 button
                     onClick: @props.update_profile
                     "Save"
+                button
+                    onClick: @props.nav_cell
+                    "to Cell"
             div
                 style: fp.assign flx_col, {}
 

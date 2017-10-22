@@ -7343,6 +7343,7 @@ incoming_api.res_registerGo = function({state, action, data}) {
   if (data.payload.status === "okGood") {
     c(data.payload, 'data.payload');
     ({clientToken, hornet} = data.payload);
+    push_loc('#cell');
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
@@ -7401,6 +7402,8 @@ incoming_api.res_loginGo = function({state, action, data}) {
   var clientToken, hornet;
   if (data.payload.status === "okClear") {
     ({clientToken, hornet} = data.payload.payload);
+    c("hornet on login", hornet);
+    push_loc('#cell');
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
@@ -7594,7 +7597,18 @@ window.addEventListener('hashchange', function(e) {
 
 // prehash = location.href.split('#')[1]
 // if prehash isnt undefined
-//     location.assign prehash
+//     # location.assign '#' + prehash
+//     if prehash.length is 0
+//         store.dispatch
+//             type: "nav_cell"
+//     else
+//         c 'else'
+//         store.dispatch
+//             type: "nav_" + prehash
+// else
+//         # location.assign '#'
+//         store.dispatch
+//             type: "nav_" + prehash
 
 
 /***/ }),
@@ -48915,7 +48929,7 @@ initial_state = __webpack_require__(111).default;
 
 imm_initial_state = Imm.fromJS(initial_state);
 
-store = createStore(combineReducers(reducers), imm_initial_state, compose(applyMiddleware(middleware)));
+window.store = store = createStore(combineReducers(reducers), imm_initial_state, compose(applyMiddleware(middleware)));
 
 effects = __webpack_require__(112).default({store});
 
@@ -49171,20 +49185,11 @@ incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).i
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(38).incoming);
 
 incoming_effects_api.res_wakeup = function({state, action, data}) {
-  var clientToken, hornet, navi, reloaded_navi;
-  c("WAAAKUUP");
-  c(data.payload);
-  navi = null;
-  reloaded_navi = location.href.split('#')[1];
-  c('reloaded_navi on wakeup', reloaded_navi);
+  var clientToken, hornet;
   if (data.payload.status === "OkClear") {
     ({hornet, clientToken} = data.payload);
-    if ((reloaded_navi === void 0) || (reloaded_navi.length === 0)) {
-      navi = 'cell';
-    } else {
-      navi = reloaded_navi;
-    }
-    state = state.set('navi', navi);
+    c('res from wakeup', hornet);
+    state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
     state = state.set('mood_status', 'hornet_cell');
@@ -49220,8 +49225,8 @@ api.logout = function({state, action}) {
 
 api.res_fetch_clientToken = function({state, action}) {
   var clientToken;
-  c('basic 001');
   ({clientToken} = action.payload);
+  c('res on', clientToken);
   state = state.set('clientToken', clientToken);
   if (clientToken !== null) {
     state = state.setIn(['effects', shortid()], {
@@ -49232,7 +49237,6 @@ api.res_fetch_clientToken = function({state, action}) {
       }
     });
   } else {
-    location.assign('#');
     state = state.set('mood_status', 'ufo');
     state = state.set('navi', 'ufo');
   }
@@ -49287,6 +49291,11 @@ exports.default = hornet;
 var api;
 
 api = {};
+
+api.nav_cell = function({state, action}) {
+  push_loc('#cell');
+  return state.set('navi', 'cell');
+};
 
 api.nav_edit_profile = function({state, action}) {
   push_loc('#edit_profile');
@@ -49942,6 +49951,7 @@ comp = rr({
   },
   componentWillReceiveProps: function(nextProps) {},
   render: function() {
+    c('hornet', this.props.hornet);
     return div({
       style: {
         display: 'flex',
@@ -49970,7 +49980,9 @@ comp = rr({
       }
     }), button({
       onClick: this.props.update_profile
-    }, "Save")), div({
+    }, "Save"), button({
+      onClick: this.props.nav_cell
+    }, "to Cell")), div({
       style: fp.assign(flx_col, {})
     }));
   }

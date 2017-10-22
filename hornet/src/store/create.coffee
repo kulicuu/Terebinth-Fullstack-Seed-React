@@ -16,7 +16,7 @@ initial_state = require('./initial_state.coffee').default
 
 imm_initial_state = Imm.fromJS(initial_state)
 
-store = createStore(combineReducers(reducers), imm_initial_state, compose(applyMiddleware(middleware)))
+window.store = store = createStore(combineReducers(reducers), imm_initial_state, compose(applyMiddleware(middleware)))
 
 effects = require('./effects.coffee').default { store }
 

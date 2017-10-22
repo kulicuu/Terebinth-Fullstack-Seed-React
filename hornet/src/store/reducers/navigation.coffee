@@ -1,8 +1,11 @@
 
 
-
-
 api = {}
+
+
+api.nav_cell = ({ state, action }) ->
+    push_loc '#cell'
+    state.set 'navi', 'cell'
 
 
 api.nav_edit_profile = ({ state, action }) ->

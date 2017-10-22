@@ -54,6 +54,7 @@ api.loginGo = ({ payload, spark }) ->
                                 redis.evalshaAsync login_lua_sha, 2, 'hornetId', hornet_id, 'clientToken', clientToken
                                 .then (re3) ->
                                     hornet = JSON.parse(re3)
+                                    c 'hornet after login', hornet
                                     redis.hsetAsync hornet_id, 'clientToken', clientToken
 
                                     # redis.setAsync clientToken, hornet_id

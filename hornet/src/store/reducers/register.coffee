@@ -17,7 +17,7 @@ incoming_api.res_registerGo = ({ state, action, data }) ->
     if data.payload.status is "okGood"
         c data.payload, 'data.payload'
         { clientToken, hornet } = data.payload
-
+        push_loc '#cell'
         state = state.set 'navi', 'cell'
         state = state.set 'hornet', hornet
         state = state.set 'client_token', clientToken
