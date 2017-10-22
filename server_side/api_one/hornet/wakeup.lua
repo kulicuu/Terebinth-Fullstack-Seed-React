@@ -17,15 +17,18 @@ else
     hornetTable['dateCreated'] = hornetRayy[8]
     hornetTable['lastLogin'] = hornetRayy[10]
     hornetTable['profileCompletion'] = hornetRayy[12]
-    hornetTable['status'] = "OkClear"
+    hornetTable['username'] = hornetRayy[16]
+    hornetTable['user_realName'] = hornetRayy[18]
+    hornetTable['user_location'] = hornetRayy[20]
+    -- hornetTable['status'] = "OkClear"
 
 
     local payload = {}
 
-    payload.status = "OkClear"
-    payload.hornet = hornetTable
+    payload['status'] = "OkClear"
+    payload['hornet'] = hornetTable
 
 
-    return cjson.encode(hornetTable)
+    return cjson.encode(payload)
 
 end

@@ -17,8 +17,8 @@ incoming_api.res_loginGo = ({ state, action, data }) ->
 
     if data.payload.status is "okClear"
         { clientToken, hornet } = data.payload.payload
-        c "hornet on login", hornet
-        push_loc '#cell'
+        # c "hornet on login", hornet
+        # push_loc '#cell'
         state = state.set 'navi', 'cell'
         state = state.set 'hornet', hornet
         state = state.set 'client_token', clientToken

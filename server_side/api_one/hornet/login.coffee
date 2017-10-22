@@ -50,12 +50,17 @@ api.loginGo = ({ payload, spark }) ->
                             c 'res2', res2
                             if res2 is true
                                 c 'handle case accepted.'
+                                redis.hgetallAsync hornet_id
+                                .then (hornet) ->
+                                    c "have hornet by node api", hornet
                                 clientToken = v4()
-                                redis.evalshaAsync login_lua_sha, 2, 'hornetId', hornet_id, 'clientToken', clientToken
+                                redis.evalshaAsync login_lua_sha, 2, 'hornetId', 'clientToken', hornet_id, clientToken
                                 .then (re3) ->
+                                    c 're3', re3
                                     hornet = JSON.parse(re3)
+                                    c 're3', re3
                                     c 'hornet after login', hornet
-                                    redis.hsetAsync hornet_id, 'clientToken', clientToken
+                                    # redis.hsetAsync hornet_id, 'clientToken', clientToken
 
                                     # redis.setAsync clientToken, hornet_id
                                     # redis.expireAsync clientToken, 120

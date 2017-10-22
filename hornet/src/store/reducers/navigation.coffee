@@ -4,7 +4,7 @@ api = {}
 
 
 api.nav_cell = ({ state, action }) ->
-    push_loc '#cell'
+    # push_loc '#cell'
     state.set 'navi', 'cell'
 
 

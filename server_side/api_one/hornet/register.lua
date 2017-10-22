@@ -20,12 +20,15 @@ local dateCreated = hornet['dateCreated']
 local lastLogin = hornet['lastLogin']
 local profileCompletion = hornet['profileCompletion']
 local hash = hornet['hash']
+local username = hornet['username']
+local user_realName = hornet['user_realName']
+local user_location = hornet['user_location']
 
 
 -- redis.call('hmset', hornet['hornetId'], 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
 
 
-redis.call('hmset', hornetId, 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash)
+redis.call('hmset', hornetId, 'clientToken', clientToken, 'hornetId', hornetId, 'email', email, 'dateCreated', dateCreated, 'lastLogin', lastLogin, 'profileCompletion', profileCompletion, 'hash', hash, 'username', username, 'user_realName', user_realName, 'user_location', user_location)
 
 
 

@@ -20,7 +20,7 @@ comp = rr
 
 
     render: ->
-        c 'hornet', @props.hornet
+        c 'props in edit profile', @props
         div
             style:
                 display: 'flex'

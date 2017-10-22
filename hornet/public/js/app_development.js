@@ -7343,7 +7343,7 @@ incoming_api.res_registerGo = function({state, action, data}) {
   if (data.payload.status === "okGood") {
     c(data.payload, 'data.payload');
     ({clientToken, hornet} = data.payload);
-    push_loc('#cell');
+    // push_loc '#cell'
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
@@ -7402,8 +7402,8 @@ incoming_api.res_loginGo = function({state, action, data}) {
   var clientToken, hornet;
   if (data.payload.status === "okClear") {
     ({clientToken, hornet} = data.payload.payload);
-    c("hornet on login", hornet);
-    push_loc('#cell');
+    // c "hornet on login", hornet
+    // push_loc '#cell'
     state = state.set('navi', 'cell');
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
@@ -49293,7 +49293,7 @@ var api;
 api = {};
 
 api.nav_cell = function({state, action}) {
-  push_loc('#cell');
+  // push_loc '#cell'
   return state.set('navi', 'cell');
 };
 
@@ -49951,7 +49951,7 @@ comp = rr({
   },
   componentWillReceiveProps: function(nextProps) {},
   render: function() {
-    c('hornet', this.props.hornet);
+    c('props in edit profile', this.props);
     return div({
       style: {
         display: 'flex',
