@@ -6,13 +6,14 @@ api = fp.assign api, require('./navigation.coffee').default
 api = fp.assign api, require('./register.coffee').default
 api = fp.assign api, require('./login.coffee').default
 api = fp.assign api, require('./nest.coffee').default
-
+api = fp.assign api, require('./profile.coffee').default
 
 
 incoming_effects_api = {}
 incoming_effects_api = fp.assign incoming_effects_api, require('./register.coffee').incoming
 incoming_effects_api = fp.assign incoming_effects_api, require('./login.coffee').incoming
 incoming_effects_api = fp.assign incoming_effects_api, require('./nest.coffee').incoming
+incoming_effects_api = fp.assign incoming_effects_api, require('./profile.coffee').incoming
 
 
 incoming_effects_api.res_wakeup = ({ state, action, data }) ->

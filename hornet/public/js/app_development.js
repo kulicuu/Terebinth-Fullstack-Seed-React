@@ -49176,6 +49176,8 @@ api = fp.assign(api, __webpack_require__(37).default);
 
 api = fp.assign(api, __webpack_require__(38).default);
 
+api = fp.assign(api, __webpack_require__(121).default);
+
 incoming_effects_api = {};
 
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(36).incoming);
@@ -49183,6 +49185,8 @@ incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(36).i
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(37).incoming);
 
 incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(38).incoming);
+
+incoming_effects_api = fp.assign(incoming_effects_api, __webpack_require__(121).incoming);
 
 incoming_effects_api.res_wakeup = function({state, action, data}) {
   var clientToken, hornet;
@@ -49947,7 +49951,11 @@ flx_col = {
 
 comp = rr({
   getInitialState: function() {
-    return {};
+    return {
+      user_location: null,
+      user_realName: null,
+      username: null
+    };
   },
   componentWillReceiveProps: function(nextProps) {},
   render: function() {
@@ -49963,23 +49971,46 @@ comp = rr({
     }, input({
       type: 'text',
       placeholder: 'Username',
+      onChange: (e) => {
+        return this.setState({
+          username: e.currentTarget.value
+        });
+      },
       style: {
         fontFamily: 'sans'
       }
     }), input({
       type: 'text',
       placeholder: 'Name (first, last)',
+      onChange: (e) => {
+        return this.setState({
+          user_realName: e.currentTarget.value
+        });
+      },
       style: {
         fontFamily: 'sans'
       }
     }), input({
       type: 'text',
       placeholder: 'Location',
+      onChange: (e) => {
+        return this.setState({
+          user_location: e.currentTarget.value
+        });
+      },
       style: {
         fontFamily: 'sans'
       }
     }), button({
-      onClick: this.props.update_profile
+      onClick: () => {
+        return this.props.update_profile({
+          nu_hornet: _.reduce(this.state, (acc, v, k) => {
+            if (v !== null) {
+              return acc[k] = v;
+            }
+          }, {})
+        });
+      }
     }, "Save"), button({
       onClick: this.props.nav_cell
     }, "to Cell")), div({
@@ -49994,6 +50025,12 @@ map_state_to_props = function(state) {
 
 map_dispatch_to_props = function(dispatch) {
   return {
+    update_profile: function({nu_hornet}) {
+      return dispatch({
+        type: 'update_profile',
+        nu_hornet: nu_hornet
+      });
+    },
     nav_cell: function() {
       return dispatch({
         type: 'nav_cell'
@@ -50008,6 +50045,21 @@ map_dispatch_to_props = function(dispatch) {
 };
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp);
+
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports) {
+
+var api, incoming_api;
+
+incoming_api = {};
+
+exports.incoming = incoming_api;
+
+api = {};
+
+exports.default = {};
 
 
 /***/ })

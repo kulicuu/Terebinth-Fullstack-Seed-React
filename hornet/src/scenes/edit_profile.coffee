@@ -12,7 +12,9 @@ flx_col =
 comp = rr
 
     getInitialState: ->
-        {}
+        user_location: null
+        user_realName: null
+        username: null
 
     componentWillReceiveProps: (nextProps) ->
 
@@ -31,21 +33,35 @@ comp = rr
                 input
                     type: 'text'
                     placeholder: 'Username'
+                    onChange: (e) =>
+                        @setState
+                            username: e.currentTarget.value
                     style:
                         fontFamily: 'sans'
                 input
                     type: 'text'
                     placeholder: 'Name (first, last)'
+                    onChange: (e) =>
+                        @setState
+                            user_realName: e.currentTarget.value
                     style:
                         fontFamily: 'sans'
                 input
                     type: 'text'
                     placeholder: 'Location'
+                    onChange: (e) =>
+                        @setState
+                            user_location: e.currentTarget.value
                     style:
                         fontFamily: 'sans'
 
                 button
-                    onClick: @props.update_profile
+                    onClick: =>
+                        @props.update_profile
+                            nu_hornet: _.reduce @state, (acc, v, k) =>
+                                if v isnt null
+                                    acc[k] = v
+                            , {}
                     "Save"
                 button
                     onClick: @props.nav_cell
@@ -61,6 +77,11 @@ map_state_to_props = (state) ->
 
 
 map_dispatch_to_props = (dispatch) ->
+
+    update_profile: ({ nu_hornet }) ->
+        dispatch
+            type: 'update_profile'
+            nu_hornet: nu_hornet
 
     nav_cell: ->
         dispatch { type: 'nav_cell' }
