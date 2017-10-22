@@ -60,7 +60,7 @@ comp = rr
                             button
                                 style: {}
                                 onClick: @props.logout
-                                "Logoaaaut"
+                                "Logout"
 
                     else
                         div null, 'continuing introductions'
@@ -75,6 +75,9 @@ comp = rr
                         style: h3_top()
                         "user profile hornet cell"
 
+                    button
+                        onClick: @props.nav_edit_profile
+                        "Edit Profile"
 
                     div
                         style:
@@ -92,7 +95,7 @@ comp = rr
                     button
                         style: {}
                         onClick: @props.logout
-                        "Logoaaaut"
+                        "Logout"
 
 
 map_state_to_props = (state) ->
@@ -100,15 +103,15 @@ map_state_to_props = (state) ->
 
 
 map_dispatch_to_props = (dispatch) ->
+
+    nav_edit_profile: ->
+        dispatch { type: 'nav_edit_profile' }
+
     logout: ->
         dispatch { type: 'logout' }
 
 
-    nav_register: ->
-        dispatch { type: 'nav_register' }
 
-    nav_login: ->
-        dispatch { type : 'nav_login'}
 
 
 exports.default = connect(map_state_to_props, map_dispatch_to_props)(comp)

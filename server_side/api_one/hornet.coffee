@@ -32,7 +32,7 @@ api = fp.assign api, require('./hornet/login').default
 
 
 api.wakeup_refresh_w_clientToken = ({ payload, spark }) ->
-
+    c 'c wakeup'
     { clientToken } = payload
 
     redis.evalshaAsync wakeup_lua_sha, 1, 'clientToken', JSON.stringify({clientToken})
@@ -42,6 +42,11 @@ api.wakeup_refresh_w_clientToken = ({ payload, spark }) ->
         res = JSON.parse(re34)
         if res.status is "UFO"
             c 'nope'
+            spark.write
+                type: 'res_wakeup'
+                payload:
+                    status: 'Ufo'
+
         else if res.status is "OkClear"
             spark.write
                 type: 'res_wakeup'

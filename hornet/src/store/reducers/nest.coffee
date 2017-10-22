@@ -19,7 +19,6 @@ incoming_api = {}
 
 
 incoming_api.res_get_nest = ({ state, action, data }) ->
-    c 'data.payload on res_get_nest', data.payload
     parsed = JSON.parse data.payload
     nest = _.reduce parsed[0], (acc, v, idx) ->
         if (idx % 2) is 1

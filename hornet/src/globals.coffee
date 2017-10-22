@@ -61,3 +61,25 @@ window.get_abs_val_open = (fig_raw) ->
     { ww , wh } = @props
     ratio_zzz = fig_raw / 1366
     ratio_zzz * ww
+
+
+
+window.llocate = []
+
+
+window.push_loc = (new_loc) ->
+    llocate.push location.href.split('#')[1]
+    location.assign new_loc
+
+window.nav_back = ->
+    new_loc = llocate.pop()
+    location.assign new_loc
+
+
+
+window.unbeforeunload = (e) ->
+    c 'onbeforeunload', e
+
+
+window.addEventListener 'hashchange', (e) ->
+    c 'hashchange', e
