@@ -83,3 +83,6 @@ window.unbeforeunload = (e) ->
 
 window.addEventListener 'hashchange', (e) ->
     c 'hashchange', e
+    # prehash = location.href.split('#')[1]
+    # if prehash isnt undefined
+    #     location.assign prehash

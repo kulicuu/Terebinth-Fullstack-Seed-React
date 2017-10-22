@@ -31,6 +31,10 @@ hornet_f = ({ email, hash }) ->
     lastLogin: Date.now()
     profileCompletion: "new_hornet"
     hash: hash
+    username: ""
+    user_realName: ""
+    user_location: ""
+    
 
 hornet_safe_f = ({ hornet }) ->
     fp.omit ['hash', 'hornetId' ], hornet

@@ -1,11 +1,11 @@
 
-navi = null
-reloaded_navi = location.href.split('#')[1]
-c 'reloaded_navi', reloaded_navi
-if (reloaded_navi is undefined) or (reloaded_navi.length is 0)
-    navi = 'ufo'
-else
-    navi = reloaded_navi
+# navi = null
+# reloaded_navi = location.href.split('#')[1]
+# c 'reloaded_navi', reloaded_navi
+# if (reloaded_navi is undefined) or (reloaded_navi.length is 0)
+#     navi = 'ufo'
+# else
+#     navi = reloaded_navi
 
 exports.default =
     hornet:
@@ -13,7 +13,7 @@ exports.default =
 
         mood_status: 'ufo'
 
-        navi: navi
+        navi: 'ufo'
 
         effects : Imm.Map
             "#{shortid()}":

@@ -15,12 +15,10 @@ cell = rc require('../scenes/cell.coffee').default
 render = ->
     switch @props.navi
         when 'edit_profile'
-            push_loc '#edit_profile'
             edit_profile()
         when 'cell'
             cell()
         when 'ufo'
-            c 'going ufo'
             ufo()
         when 'login'
             login()

@@ -7592,6 +7592,10 @@ window.addEventListener('hashchange', function(e) {
   return c('hashchange', e);
 });
 
+// prehash = location.href.split('#')[1]
+// if prehash isnt undefined
+//     location.assign prehash
+
 
 /***/ }),
 /* 41 */
@@ -49173,13 +49177,13 @@ incoming_effects_api.res_wakeup = function({state, action, data}) {
   navi = null;
   reloaded_navi = location.href.split('#')[1];
   c('reloaded_navi on wakeup', reloaded_navi);
-  if (reloaded_navi === void 0 || reloaded_navi.length === 0) {
-    navi = 'ufo';
-  } else {
-    navi = reloaded_navi;
-  }
   if (data.payload.status === "OkClear") {
     ({hornet, clientToken} = data.payload);
+    if ((reloaded_navi === void 0) || (reloaded_navi.length === 0)) {
+      navi = 'cell';
+    } else {
+      navi = reloaded_navi;
+    }
     state = state.set('navi', navi);
     state = state.set('hornet', hornet);
     state = state.set('client_token', clientToken);
@@ -49197,7 +49201,7 @@ incoming_effects_api.res_wakeup = function({state, action, data}) {
     });
     return state;
   } else {
-    return state.setIn;
+    return state;
   }
 };
 
@@ -49285,6 +49289,7 @@ var api;
 api = {};
 
 api.nav_edit_profile = function({state, action}) {
+  push_loc('#edit_profile');
   return state.set('navi', 'edit_profile');
 };
 
@@ -49307,25 +49312,18 @@ exports.default = api;
 /* 111 */
 /***/ (function(module, exports) {
 
-var navi, reloaded_navi;
-
-navi = null;
-
-reloaded_navi = location.href.split('#')[1];
-
-c('reloaded_navi', reloaded_navi);
-
-if ((reloaded_navi === void 0) || (reloaded_navi.length === 0)) {
-  navi = 'ufo';
-} else {
-  navi = reloaded_navi;
-}
-
+// navi = null
+// reloaded_navi = location.href.split('#')[1]
+// c 'reloaded_navi', reloaded_navi
+// if (reloaded_navi is undefined) or (reloaded_navi.length is 0)
+//     navi = 'ufo'
+// else
+//     navi = reloaded_navi
 exports.default = {
   hornet: {
     // jobs: Imm.Map({})
     mood_status: 'ufo',
-    navi: navi,
+    navi: 'ufo',
     effects: Imm.Map({
       [`${shortid()}`]: {
         type: 'fetch_clientToken'
@@ -49460,12 +49458,10 @@ cell = rc(__webpack_require__(119).default);
 render = function() {
   switch (this.props.navi) {
     case 'edit_profile':
-      push_loc('#edit_profile');
       return edit_profile();
     case 'cell':
       return cell();
     case 'ufo':
-      c('going ufo');
       return ufo();
     case 'login':
       return login();

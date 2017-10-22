@@ -6,9 +6,11 @@ api = {}
 
 
 api.nav_edit_profile = ({ state, action }) ->
+    push_loc '#edit_profile'
     state.set 'navi', 'edit_profile'
 
 api.nav_ufo = ({ state, action }) ->
+
     state.set 'navi', 'ufo'
 
 

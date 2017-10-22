@@ -21,13 +21,15 @@ incoming_effects_api.res_wakeup = ({ state, action, data }) ->
     navi = null
     reloaded_navi = location.href.split('#')[1]
     c 'reloaded_navi on wakeup', reloaded_navi
-    if reloaded_navi is undefined or reloaded_navi.length is 0
-        navi = 'ufo'
-    else
-        navi = reloaded_navi
+
 
     if data.payload.status is "OkClear"
         { hornet, clientToken } = data.payload
+
+        if (reloaded_navi is undefined) or (reloaded_navi.length is 0)
+            navi = 'cell'
+        else
+            navi = reloaded_navi
 
         state = state.set 'navi', navi
         state = state.set 'hornet', hornet
@@ -43,7 +45,7 @@ incoming_effects_api.res_wakeup = ({ state, action, data }) ->
                 payload: { clientToken }
         state
     else
-        state.setIn
+        state
 
 
 
