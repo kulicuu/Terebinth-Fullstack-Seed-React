@@ -1,16 +1,8 @@
 
 
-require './globals.coffee'
-
-
-
-express = require 'express'
-cookie_parser = require 'cookie-parser'
-
-
-
 http = require 'http'
 Primus = require 'primus'
+cookie_parser = require 'cookie-parser'
 
 
 hornet_data = do ->
@@ -20,27 +12,9 @@ hornet_data = do ->
     cookies: cookies
     public_dir: path.resolve('..', 'hornet', 'public')
     index_path: '/dev_index.html'
-    port: 2223
-    primus_opts:
-        transformer: 'websockets'
+    static_port: 2223
 
 
-express_session = require 'express-session'
-connect_redis = require 'connect-redis'
-Redis_Store = connect_redis express_session
-
-# NOTE most or a lot of this sessions stuff isn't
-#actually used, we're just doing our own token based
-# thing.  So maybe TODO get rid of it if it doesn't
-# become useful.
-
-
-
-hornet_redis_store_opts = {}
-hornet_redis_store = new Redis_Store(hornet_redis_store_opts)
-
-
-# TODO Implementation details  of Primus-specific sessions.
 primus_session = (options) ->
     key = options.key or 'connect.sid'
     store = options.store
@@ -60,35 +34,32 @@ primus_session = (options) ->
             next()
 
 
-hornet = express()
-
-
-# This may not be necessary iwth the usage of static services.
-hornet.all '/', (req, res, next) ->
-    c color.purple(req.url, on)
-    res.sendFile path.join(hornet_data.public_dir, hornet_data.index_path)
-
-
-hornet.use express.static(hornet_data.public_dir)
-
-
-hornet_server = http.createServer hornet
-
-
 opts_hornet_primus =
     transformer: 'websockets'
 
 
-hornet_primus = new Primus(hornet_server, hornet_data.primus_opts)
+express_session = require 'express-session'
+connect_redis = require 'connect-redis'
+Redis_Store = connect_redis express_session
+
+
+hornet_redis_store_opts = {}
+hornet_redis_store = new Redis_Store(hornet_redis_store_opts)
+
+primus_only_server = http.createServer()
+
+
+hornet_primus = new Primus(primus_only_server, opts_hornet_primus)
+
 
 hornet_primus.use 'cookies', hornet_data.cookies
 hornet_primus.use 'session', primus_session, { store: hornet_redis_store }
 hornet_primus.save path.join(hornet_data.public_dir, '/js' , '/primus.js')
 
 
+primus_port = 2224
 
 
-
-hornet_server.listen hornet_data.port, ->
+primus_only_server.listen primus_port, ->
     require("./'stateless'_primus_effect.coffee") { hornet_primus }
-    c 'server on', hornet_data.port
+    c "#{color.green('Primus server listenening on port ', on)} #{color.cyan(primus_port, on)}"
