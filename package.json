@@ -25,6 +25,7 @@
         "react-dom-factories": "latest",
         "redis": "latest",
         "react-dom": "latest",
+        "react-dropzone": "latest",
         "react-redux": "latest",
         "redux": "latest",
         "redux-immutable": "latest",

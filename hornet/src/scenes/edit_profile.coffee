@@ -15,10 +15,12 @@ comp = rr
         user_location: null
         user_realName: null
         username: null
+        imagePreviewUrl: ""
 
     componentWillReceiveProps: (nextProps) ->
 
 
+    previewFile: ->
 
 
     render: ->
@@ -30,6 +32,31 @@ comp = rr
                 justifyContent: 'center'
             div
                 style: fp.assign flx_col, {}
+
+                input
+                    type: 'file'
+                    onChange: (e) =>
+                        c 'image change', e
+                        e.preventDefault()
+                        file = e.target.files[0]
+                        reader = new FileReader()
+                        reader.onloadend = =>
+                            @setState
+                                file: file
+                                imagePreviewUrl: reader.result
+                        reader.readAsDataURL file
+
+                img
+                    src: @state.imagePreviewUrl
+                    width: .2 * ww
+                    height: .2 * ww
+
+                div
+                    style:
+                        background: "url(#{@state.imagePreviewUrl}) 50% 50% no-repeat"
+                        width: .2 * ww
+                        height: .2 * ww
+
                 input
                     type: 'text'
                     placeholder: 'Username'

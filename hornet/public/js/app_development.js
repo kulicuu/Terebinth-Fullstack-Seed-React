@@ -49850,10 +49850,12 @@ comp = rr({
     return {
       user_location: null,
       user_realName: null,
-      username: null
+      username: null,
+      imagePreviewUrl: ""
     };
   },
   componentWillReceiveProps: function(nextProps) {},
+  previewFile: function() {},
   render: function() {
     c('props in edit profile', this.props);
     return div({
@@ -49865,6 +49867,32 @@ comp = rr({
     }, div({
       style: fp.assign(flx_col, {})
     }, input({
+      type: 'file',
+      onChange: (e) => {
+        var file, reader;
+        c('image change', e);
+        e.preventDefault();
+        file = e.target.files[0];
+        reader = new FileReader();
+        reader.onloadend = () => {
+          return this.setState({
+            file: file,
+            imagePreviewUrl: reader.result
+          });
+        };
+        return reader.readAsDataURL(file);
+      }
+    }), img({
+      src: this.state.imagePreviewUrl,
+      width: .2 * ww,
+      height: .2 * ww
+    }), div({
+      style: {
+        background: `url(${this.state.imagePreviewUrl}) 50% 50% no-repeat`,
+        width: .2 * ww,
+        height: .2 * ww
+      }
+    }), input({
       type: 'text',
       placeholder: 'Username',
       onChange: (e) => {
