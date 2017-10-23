@@ -1,5 +1,23 @@
 # Edit Profile
 
+# TODO switch to this cloud provider for managing images https://cloudinary.com/
+
+# https://www.alkamunia.com/1680/  explains cloudinary with react
+
+# another resource on cloudinary https://css-tricks.com/image-upload-manipulation-react/
+
+
+
+
+
+{ cloudinary_url, preset_id } = require('../config/cloudinary.coffee')
+
+
+request = require('superagent')
+Dropzone_pre = require('react-dropzone').default
+Dropzone = rc Dropzone_pre
+
+
 
 flx_col =
     display: 'flex'
@@ -16,6 +34,9 @@ comp = rr
         user_realName: null
         username: null
         imagePreviewUrl: ""
+        uploadedFileCloudinaryUrl: ''
+        uploadedFile: null
+        filePreviewUrl: null
 
     componentWillReceiveProps: (nextProps) ->
 
@@ -32,6 +53,24 @@ comp = rr
                 justifyContent: 'center'
             div
                 style: fp.assign flx_col, {}
+                Dropzone
+                    multiple: false
+                    accept: "image/*"
+                    onDrop: (files) =>
+                        file = files[0]
+                        reader = new FileReader()
+                        reader.onloadend = =>
+                            @setState
+                                filePreviewUrl: reader.result
+                                uploadedFile: file
+                                file_2: file
+                        reader.readAsDataURL file
+                img
+                    src: @state.filePreviewUrl
+                    width: .2 * ww
+                    height: .2 * ww
+
+
 
                 input
                     type: 'file'
